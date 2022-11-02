@@ -3,10 +3,11 @@ const fs = require('fs');
 const secrets = require('./config');
 
 function createS3Instance() {
+    var test = process.env.AWSAccessKeyId;
     const s3 = new AWS.S3({
         credentials: {
-            accessKeyId: secrets.awsCreds.accessKey,
-            secretAccessKey: secrets.awsCreds.secretKey
+            accessKeyId: process.env.AWSAccessKeyId,
+            secretAccessKey: process.env.AWSSecretKey,
         },
         region: 'eu-central-1'
     });
