@@ -1,0 +1,322 @@
+<html>
+
+    <head>
+        <title>Convert Media S3</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <style>
+            .card {
+                display: inline-block;
+            }
+        </style>
+    </head>
+
+    <body onload="loadData()">
+        
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">Convert</a>
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="/files">File Management <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/about">About</a>
+                </li>
+              </ul>
+            
+        </nav>
+
+        <div class="container">
+
+            <div class="jumbotron mt-4">
+                <div class="mx-auto" style="width: 20rem;">
+                    <div>
+                        <h1>Convert Files</h1>
+                    </div>
+                    <div>
+                        <p>Specify the parameters of your convert and apply them to a file by klicking it.</p>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <div class="row">           
+                              
+                        <form id="convertForm" action="/parameters" method="post">
+
+                                <div class="w-75 mx-auto mb-3">
+
+                                    <div class="form-row">
+                                        <div class="col mb-3">
+                                            <label for="bitrate" class="control-label">Bitrate in Mb/s:</label>
+                                            <input class=" form-control" type="number" name="bitrate" id="bitrate" placeholder="Bitrate" min="0.01" max="50">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="outputName" class="control-label">Output Filename:</label>
+                                            <input class=" form-control" type="text" name="outputName" id="outputName" placeholder="Output Name" required>
+                                        </div>
+                                    </div>
+
+                                    
+                                    
+                                    <div class="form-row">
+                                        <div class="col mb-3">
+                                            <label for="outputFormat" class="control-label">Video Container:</label>
+                                            <select class="form-control " placeholder="default: mp4" name="outputFormat" id="outputFormat" required onChange="visibility()">
+                                                <option>mp4</option>
+                                                <option>mov</option>
+                                               <!--  <option>avi</option> -->
+                                                <option>mkv</option>
+                                                <option>mxf</option>
+                                            </select>
+                                        </div>
+
+                                    
+
+                                        <div class="col mb-3">
+                                            <label for="codec" class="control-label">Video Codec:</label>
+                                            <select class="form-control" placeholder="default: h264" name="codec" id="codec" required>
+                                                <option id="h264">h264</option>
+                                                <option id="hevc">hevc</option>
+                                                <option id="vp9">vp9</option>
+                                                <option id="prores">prores</option>
+                                                <option id="dnxhd">dnxhd</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="col mb-3">
+                                            <label for="width" class="control-label">Target width:</label>
+                                            <input type="number" class="form-control" placeholder="leave blank for original" name="width" id="width" min="200" max="4096">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="height" class="control-label">Target height:</label>
+                                            <input type="number" class="form-control" placeholder="leave blank for original" name="height" id="height" min="200" max="2304">
+                                        </div>
+                                    </div>
+                                
+                                    
+
+                                
+
+                                    <input id= "hidden_url" type="hidden" name="url">
+                                    <input id= "hidden_filename" type="hidden" name="filename">
+                                
+                                </div>
+                            
+                                <div class="card-columns mb-3">
+                        
+                                    
+                                        <div id="bucket-data-list"></div>
+                                    
+
+                                
+                                </div>
+                            
+                            
+                
+
+                
+                    
+                            
+
+                        </form>
+            </row>        
+                
+
+
+            
+        </div>
+
+    
+
+        
+
+        <script>
+            let list = [];
+
+            function saveFile(event) {
+                const xhr = new XMLHttpRequest();
+                const formData = new FormData();
+                const file = event.files[0];
+                formData.append('s3-file', file);
+
+                xhr.onreadystatechange = (state) => {
+                    if(xhr.readyState === XMLHttpRequest.DONE) {
+                    }
+                }
+
+                xhr.timeout = 5000;
+                xhr.open('POST', '/upload-to-s3');
+                xhr.send(formData);
+            }
+
+            function loadData() {
+                getBucketObjectList();
+                visibility();
+            }
+
+            function getBucketObjectList() {
+                getData('/all-files', (data = []) => {
+                    data = JSON.parse(data);
+                    list = data;
+                    
+                    const objectList = data.map((item, index) => {
+                        return `<div class="mb-3 card" onclick="sendForm(${index})">
+                            <div class="card-header">
+                                            <h4 class="card-title">${item.key}</h4> 
+                                        </div>
+                                        <div class="card-body">
+                                            File Size: ${item.size} 
+                                            <br>
+                                            File Modified: ${item.lastModified.slice(0,-8).replace(/-/g, ".").replace(/T/g, " ")}
+                                        </div>
+                        </div>
+                        <br>`
+                    });
+                    document.getElementById('bucket-data-list').innerHTML = objectList.join(" ");
+                });
+            }
+
+            async function sendForm(index) {
+                if(formValidation()){
+                    const fileName = (list[index] || {}).key;
+                    const url = getData(`/get-object-url/${fileName}`, (url) => {
+                        document.getElementById("hidden_url").value = url;
+                        document.getElementById("hidden_filename").value = fileName;
+                        document.getElementById("convertForm").submit(function(eventObj) {
+                            return true;
+                        });
+                        
+                    });
+
+                    console.log(url);
+                }
+            }
+
+            
+            function formValidation(){
+                var breakFunc = 1;
+                var outputFormat = document.getElementById('outputFormat').value;
+                if (outputFormat = "") {
+                    alert('Please select a container!');
+                    breakFunc=0;               
+                }
+
+                var outputName = document.getElementById('outputName').value;
+                if (outputName = "") {
+                    alert('Please select a output name!');
+                    breakFunc=0;
+                }
+
+                var codec = document.getElementById('codec').value;
+                if (codec = "") {
+                    alert('Please select a codec!');
+                    breakFunc=0;
+                }
+                
+                var bitrate = document.getElementById('bitrate').value;
+                if (bitrate > 50) {
+                    alert('Bitrate is to high!');
+                    breakFunc=0;                    
+                }
+
+                if (bitrate && (bitrate < 0.01)) {
+                    alert('Bitrate is to low!')
+                    breakFunc=0;
+                }
+
+                var width = document.getElementById('width').value;
+                if ((width) && (width > 4096)) {
+                    alert('Width is to high!');
+                    breakFunc=0;                    
+                }
+
+                if (((width) && width < 200)) {
+                    alert('Width is to low!');
+                    breakFunc=0;                    
+                }
+                
+                var height = document.getElementById('height');
+                if ((height.value) && (height.value > 2304)) {
+                    alert('Height is to high!');
+                    breakFunc=0;                    
+                }
+
+                if ((height.value) && (height.value < 200)) {
+                    alert('Height is to low!');
+                    breakFunc=0;                    
+                }
+                
+
+                return(breakFunc);
+
+            }
+
+            function visibility() {
+
+                
+                
+                var outputFormat = document.getElementById("outputFormat").value;
+
+                console.log(outputFormat);
+                if (outputFormat == "mp4" ){
+                    document.getElementById("h264").style.display = "inline";
+                    document.getElementById("hevc").style.display = "inline";
+                    document.getElementById("vp9").style.display = "inline";
+                    document.getElementById("prores").style.display = "none";
+                    document.getElementById("dnxhd").style.display = "none";
+                }
+                else if (outputFormat == "mov") {
+                    document.getElementById("h264").style.display = "inline";
+                    document.getElementById("hevc").style.display = "inline";
+                    document.getElementById("vp9").style.display = "none";
+                    document.getElementById("prores").style.display = "inline";
+                    document.getElementById("dnxhd").style.display = "none";
+                }
+
+                else if (outputFormat == "mkv") {
+                    document.getElementById("h264").style.display = "inline";
+                    document.getElementById("hevc").style.display = "inline";
+                    document.getElementById("vp9").style.display = "none";
+                    document.getElementById("prores").style.display = "none";
+                    document.getElementById("dnxhd").style.display = "inline";
+                }
+
+                else if (outputFormat == "mxf") {
+                    document.getElementById("h264").style.display = "inline";
+                    document.getElementById("hevc").style.display = "inline";
+                    document.getElementById("vp9").style.display = "none";
+                    document.getElementById("prores").style.display = "inline";
+                    document.getElementById("dnxhd").style.display = "inline";
+                }
+            }
+
+            async function getData(url, cb) {
+
+
+                const xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = state => {
+                    if(xhr.readyState === XMLHttpRequest.DONE) {
+                        cb(xhr.responseText);
+                    }
+                }
+                xhr.timeout = 10000;
+                xhr.open('GET', url);
+                xhr.send();
+            }
+        </script>
+
+    
+        <!-- Bootstrap scripts -->
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+    </body>
+</html>

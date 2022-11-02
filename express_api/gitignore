@@ -1,0 +1,8 @@
+./AWS/
+./aws_node/.vscode/
+./aws_node/node_modules/
+./express_api/bin/
+./express_api/node_modules/
+./express_api/input/
+./express_api/output/
+./terraform/.terraform/
