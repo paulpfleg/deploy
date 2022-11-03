@@ -1,3 +1,4 @@
+
 <html>
 
     <head>
@@ -43,7 +44,7 @@
 
             <div class="row">           
                               
-                        <form id="convertForm" action="/parameters" method="post">
+                        <form method="post" id="convertForm" action="/parameters" >
 
                                 <div class="w-75 mx-auto mb-3">
 
@@ -137,6 +138,7 @@
 
         <script>
             let list = [];
+            const postPath =  "http://localhost:8081"//process.env.postPath ||
 
             function saveFile(event) {
                 const xhr = new XMLHttpRequest();
@@ -155,6 +157,31 @@
             }
 
             function loadData() {
+                const form = document.getElementById("convertForm");
+                form.addEventListener('submit', function(e) {
+                // Prevent default behavior:
+                e.preventDefault();
+                // Create payload as new FormData object:
+                const payload = new FormData(form);
+
+                var object = {};
+                formData.forEach(function(value, key){
+                object[key] = value;
+                });
+                var json = JSON.stringify(object);
+
+                // Post the payload using Fetch:
+                fetch("http://localhost:8081/convert", { //${postPath}
+                method: 'POST',
+                headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({a: 1, b: 'Textual content'})
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
+            })
                 getBucketObjectList();
                 visibility();
             }
@@ -308,6 +335,10 @@
                 xhr.open('GET', url);
                 xhr.send();
             }
+            
+            const form = document.getElementById('convertForm');
+
+            
         </script>
 
     

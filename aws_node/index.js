@@ -51,7 +51,7 @@ app.post('/parameters', function(req,res){
     console.log(req.body);
 
     const options = {
-      url: 'http://localhost:8080/convert/',
+      url: 'http://localhost:8081/convert/',
       json: true,
       body: {
       "bitrate": req.body.bitrate,
