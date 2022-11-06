@@ -80,6 +80,7 @@ app.post('/convert/', (req,res) => {
         var converted=Convert.convert(filename,bitrate,outputName,outputFormat,codec,width,height)
     
         res.send({
+            status: "ok",
             convert: `Converted ${filename} with a bitrate of ${bitrate}`,
             executed: `${converted.ffmpeg_command}`
         });
@@ -97,8 +98,11 @@ app.post('/convert/', (req,res) => {
                 console.log(" There was an Error during Upload ")
             })
 
-        
+try{
     fs.unlinkSync(`${__dirname}/input/${filename}`);
+}catch (exception){
+    console.log('There was an error druring file delete')
+}
 
 
 
@@ -109,4 +113,3 @@ app.post('/convert/', (req,res) => {
     
 
 });
-

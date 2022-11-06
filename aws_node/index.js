@@ -51,7 +51,7 @@ app.post('/parameters', function(req,res){
     console.log(req.body);
 
     const options = {
-      url: 'http://localhost:8080/convert/',
+      url: 'http://localhost:8081/convert/',
       json: true,
       body: {
       "bitrate": req.body.bitrate,
@@ -64,22 +64,43 @@ app.post('/parameters', function(req,res){
       "height":req.body.height
       }     
     }
+    
+
+    var prove = sendRequest(options);
+
+    (async () => {
+      var prove = await sendRequest(options);
+      if (prove.body.status = "ok"){
+        res.sendFile(__dirname + '/public/sucess.html')
+      }
+    })()
   
-  
+    console.log("Send Convert params to FFMPEG node");
+    
+   
+   
+});
+
+async function postParam(options) {
+  const res = await sendRequest(options).catch(err => console.log(err));
+  return await res
+}
+
+function sendRequest(options) {
+  return new Promise((resolve, reject) => {
+
     request.post(options, (err, res, body) => {
       
       if (err) {
         return console.log(err)
       }
-      console.log(`Status: ${res.statusCode}`)
-      console.log(body)
+      console.log(`Status: ${res.statusCode}`);
+      
+      resolve(res);
+            
     })
-
-    console.log("Send Convert params to FFMPEG node");
-    res.sendFile(__dirname + '/public/sucess.html');
-   
-});
-
+  });
+}
 
 app.listen(PORT, () => {
     console.log(`its alive on http://localhost:${PORT}`);
