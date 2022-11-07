@@ -68,48 +68,60 @@ app.post('/convert/', (req,res) => {
 
     const file = fs.createWriteStream(`${__dirname}/input/${filename}`);
     const request = https.get(`${url}`, function(response) {
-   response.pipe(file);
+        response.pipe(file);
 
-   // after download completed close filestream
-   file.on("finish", () => {
-       file.close();
-       console.log("Download Completed");
+        // after download completed close filestream
+    file.on("finish", () => {
 
-    
+        try{
 
-    try{  
+            file.close();
+            console.log("Download Completed");
 
-        converted=Convert.convert(filename,bitrate,outputName,outputFormat,codec,width,height)
-    
-/*         res.send({
-            status: "ok",
-            convert: `Converted ${filename} with a bitrate of ${bitrate}`,
-            executed: `${converted.ffmpeg_command}`
-        }); */
+        }catch (exception){
+            res.send({
+                status : "error",
+                error_code: "005",
+                error_message : "file download error"
+            })
+        }
+
+        try{  
+
+            converted=Convert.convert(filename,bitrate,outputName,outputFormat,codec,width,height);
         
-    }catch (exception){
+            
+        }catch (exception){
         res.send({
             status : "error",
             error_code: "001",
-            error_message : "error catched when ffmpeg command was executed"
+            error_message : "ffmpeg command error"
         })
-    }
+        }
     
 
         s3Controller.s3Upload(`${__dirname}/output/${outputName}.${outputFormat}`,`${outputName}.${outputFormat}`)
             .then( (converted) => {
-                fs.unlinkSync(`${__dirname}/output/${outputName}.${outputFormat}`);
-                fs.unlinkSync(`${__dirname}/input/${filename}`);
-                res.send({
-                    status : "ok",
-                    convert: `Converted ${filename} with a bitrate of ${bitrate}`,
-                    executed: `${converted.ffmpeg_command}`
-                })
+                if (unlinkFiles(outputName,outputFormat)){
+                    res.send({
+                        status : "ok",
+                        convert: `Converted ${filename} with a bitrate of ${bitrate}`,
+                        executed: `${converted.ffmpeg_command}`
+                    })
+                }
+                else{
+                    res.send({
+                        status : "error",
+                        error_code: "003",
+                        error_message : "local file deletation error"
+                    })
+                }
             })
             .catch((response) => {
                 res.send({
                     status : "error",
-                    error_message : "upload error"
+                    error_code: "002",
+                    error_message : "file upload error"
                 })
             })
 
@@ -120,3 +132,9 @@ app.post('/convert/', (req,res) => {
     
 
 });
+
+function unlinkFiles(name,format) {
+    fs.unlinkSync(`${__dirname}/output/${name}.${format}`);
+    fs.unlinkSync(`${__dirname}/input/${name}`);
+    return true
+}

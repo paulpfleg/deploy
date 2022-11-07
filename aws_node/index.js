@@ -72,12 +72,12 @@ app.post('/parameters', function(req,res){
 
     (async () => {
       var prove = await sendRequest(options);
+      console.log("Response: %j", prove.body );
       if (prove.body.status === "ok"){
-        console.log("Response: %j", prove.body );
         res.sendFile(__dirname + '/public/sucess.html')
       }
       else {
-        res.render('error.ejs')
+        res.render('error.ejs', { error : prove.body.error_message} )
       }
     })()
   
