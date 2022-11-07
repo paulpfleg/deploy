@@ -31,14 +31,15 @@
             <div class="jumbotron mt-4">
                 <div class="mx-auto" style="width: 20rem;">
                     <div>
-                        <h1>Convert Files</h1>
+                        <h1 id="welcome" class="text-center">Convert Files</h1>
                     </div>
-                    <div>
-                        <p>Specify the parameters of your convert and apply them to a file by klicking it.</p>
+                    <div class="d-flex justify-content-center">
+                        <p class="text-center" id="forUser">Specify the parameters of your convert and apply them to a file by klicking it.</p>
                     </div>
                 </div>
             </div>
 
+            <div id="spinner_here"></div>
             
 
             <div class="row">           
@@ -187,14 +188,16 @@
                     const url = getData(`/get-object-url/${fileName}`, (url) => {
                         document.getElementById("hidden_url").value = url;
                         document.getElementById("hidden_filename").value = fileName;
-                        document.getElementById("convertForm").submit(function(eventObj) {
-                            return true;
-                            document.getElementById('convertForm').innerHTML = 
+                        document.getElementById('welcome').innerHTML = "Request in progress"
+                        document.getElementById('forUser').innerHTML = 
                             `
-                            <div class="spinner-border" role="status">
+                            <div class="spinner-border m-3 d-flex justify-content-center" style="width: 5rem; height: 5rem;" role="status">
                             <span class="sr-only">Loading...</span>
                             </div>
                             `
+                        document.getElementById("convertForm").submit(function(eventObj) {
+                            return true;
+
 
                         });
                         
