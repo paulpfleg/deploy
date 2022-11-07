@@ -2,7 +2,6 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 
 function createS3Instance() {
-    var test = process.env.AWSAccessKeyId;
     const s3 = new AWS.S3({
         credentials: {
             accessKeyId: process.env.AWSAccessKeyId,

@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require("body-parser");
 const request = require('request');
-
+const ejs = require('ejs');
 
 const app = express();
 const s3Controller = require('./src/s3-controller');
@@ -15,6 +15,8 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({
     extended:true
 }));
+
+app.set('view engine', 'ejs');
 
 // --- Constands ---
 
@@ -70,8 +72,12 @@ app.post('/parameters', function(req,res){
 
     (async () => {
       var prove = await sendRequest(options);
-      if (prove.body.status = "ok"){
+      if (prove.body.status === "ok"){
+        console.log("Response: %j", prove.body );
         res.sendFile(__dirname + '/public/sucess.html')
+      }
+      else {
+        res.render('error.ejs')
       }
     })()
   

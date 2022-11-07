@@ -4,9 +4,9 @@ const {uploadFileToS3, getBucketListFromS3, getPresignedURL} = require('./s3-ser
 async function s3Upload (file_path,filename) {
     try{
         await uploadFileToS3(file_path,filename, 'ffmpeg-node');
-        return('Uploaded!!');
+        Promise.resolve('fine')
     } catch(ex) {
-        return(ex);
+        Promise.reject(err)
     }
 }
 
@@ -24,23 +24,6 @@ async function s3Get (req, res) {
     } catch(ex) {
         res.send([]);
     }
-}
-
-async function readFormData(req) {
-    return new Promise(resolve => {
-        const dataObj = {};
-        var form = new formidable.IncomingForm();
-        form.parse(req);
-
-        form.on('file', (name, file) => {
-            dataObj.name = name;
-            dataObj.file = file;
-        });
-
-        form.on('end', () => {
-            resolve(dataObj);
-        });
-    });
 }
 
 async function getSignedUrl(Key) {

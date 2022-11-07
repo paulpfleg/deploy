@@ -11,10 +11,7 @@ const { path } = require('express/lib/application');
 const fs = require('fs');
 const path_mod = require('path');
 
-function convert(filename,bitrate,outputName,outputFormat,codec,width,height){
-
-        
-        
+function convert(filename,bitrate,outputName,outputFormat,codec,width,height){        
     try {
 
       // if no path entered or no path exists at path exit without outputs

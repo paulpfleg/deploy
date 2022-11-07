@@ -1,0 +1,5 @@
+**/bin
+**/node_modules
+**/input
+**/output
+**/config.js

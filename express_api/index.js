@@ -12,6 +12,8 @@ const Convert = require('./src/convert');
 const app = express();
 const PORT = 8081;
 
+var converted = {};
+
 app.use(express.json())
 
 app.use(bodyParser.urlencoded({
@@ -77,34 +79,39 @@ app.post('/convert/', (req,res) => {
 
     try{  
 
-        var converted=Convert.convert(filename,bitrate,outputName,outputFormat,codec,width,height)
+        converted=Convert.convert(filename,bitrate,outputName,outputFormat,codec,width,height)
     
-        res.send({
+/*         res.send({
             status: "ok",
             convert: `Converted ${filename} with a bitrate of ${bitrate}`,
             executed: `${converted.ffmpeg_command}`
-        });
+        }); */
         
     }catch (exception){
-        console.log('There was an error during the ffmpeg Command')
+        res.send({
+            status : "error",
+            error_code: "001",
+            error_message : "error catched when ffmpeg command was executed"
+        })
     }
     
+
         s3Controller.s3Upload(`${__dirname}/output/${outputName}.${outputFormat}`,`${outputName}.${outputFormat}`)
-            .then(converted => {
-                console.log("Sucessfully Uploaded File!")
+            .then( (converted) => {
                 fs.unlinkSync(`${__dirname}/output/${outputName}.${outputFormat}`);
+                fs.unlinkSync(`${__dirname}/input/${filename}`);
+                res.send({
+                    status : "ok",
+                    convert: `Converted ${filename} with a bitrate of ${bitrate}`,
+                    executed: `${converted.ffmpeg_command}`
+                })
             })
             .catch((response) => {
-                console.log(" There was an Error during Upload ")
+                res.send({
+                    status : "error",
+                    error_message : "upload error"
+                })
             })
-
-try{
-    fs.unlinkSync(`${__dirname}/input/${filename}`);
-}catch (exception){
-    console.log('There was an error druring file delete')
-}
-
-
 
         //fs.unlinkSync(`${__dirname}/output/${outputName}.${outputFormat}`);
 
