@@ -197,8 +197,6 @@
                             `
                         document.getElementById("convertForm").submit(function(eventObj) {
                             return true;
-
-
                         });
                         
                     });
@@ -211,19 +209,19 @@
             function formValidation(){
                 var breakFunc = 1;
                 var outputFormat = document.getElementById('outputFormat').value;
-                if (outputFormat = "") {
+                if (outputFormat === "") {
                     alert('Please select a container!');
                     breakFunc=0;               
                 }
 
                 var outputName = document.getElementById('outputName').value;
-                if (outputName = "") {
+                if (outputName === "") {
                     alert('Please select a output name!');
                     breakFunc=0;
                 }
 
                 var codec = document.getElementById('codec').value;
-                if (codec = "") {
+                if (codec === "") {
                     alert('Please select a codec!');
                     breakFunc=0;
                 }

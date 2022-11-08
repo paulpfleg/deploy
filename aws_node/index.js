@@ -52,57 +52,33 @@ app.post('/parameters', function(req,res){
 
     console.log(req.body);
 
-    const options = {
-      url: 'http://localhost:8081/convert/',
-      json: true,
-      body: {
-      "bitrate": req.body.bitrate,
-      "outputName": req.body.outputName,
-      "outputFormat": req.body.outputFormat,
-      "url": req.body.url,
-      "filename": req.body.filename,
-      "codec": req.body.codec,
-      "width":req.body.width,
-      "height":req.body.height
-      }     
-    }
-    
+ 
 
-    var prove = sendRequest(options);
-
-    (async () => {
-      var prove = await sendRequest(options);
-      console.log("Response: %j", prove.body );
-      if (prove.body.status === "ok"){
-        res.sendFile(__dirname + '/public/sucess.html')
-      }
-      else {
-        res.render('error.ejs', { error : prove.body.error_message} )
-      }
-    })()
-  
-    console.log("Send Convert params to FFMPEG node");
-    
+    //var prove = sendRequest();
+    call(req,res);
    
    
 });
 
-async function postParam(options) {
-  const res = await sendRequest(options).catch(err => console.log(err));
-  return await res
-}
 
 function sendRequest(options) {
   return new Promise((resolve, reject) => {
 
     request.post(options, (err, res, body) => {
-      
       if (err) {
-        return console.log(err)
+        res = {
+          body : {
+            error_message : "connection error"
+          }
+        }
+        resolve(res);
       }
+      else{
       console.log(`Status: ${res.statusCode}`);
-      
       resolve(res);
+      }
+      
+      
             
     })
   });
@@ -116,4 +92,31 @@ app.listen(PORT, () => {
 function logger (req,res,next) {
 console.log("Site "+req.originalUrl+" has been requested")
 next()
+}
+
+async function call(param1,param2) {
+  var options = {
+    url: 'http://localhost:8081/convert/',
+    json: true,
+    body: {
+      "bitrate": param1.body.bitrate,
+      "outputName": param1.body.outputName,
+      "outputFormat": param1.body.outputFormat,
+      "url": param1.body.url,
+      "filename": param1.body.filename,
+      "codec": param1.body.codec,
+      "width": param1.body.width,
+      "height": param1.body.height
+    }
+  };
+
+      var prove = await sendRequest(options);
+      console.log("Response: %j", prove.body);
+      if (prove.body.status === "ok") {
+        param2.sendFile(__dirname + '/public/sucess.html');
+      }
+      else {
+        param2.render('error.ejs', { error: prove.body.error_message });
+      }
+
 }

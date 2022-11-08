@@ -3,10 +3,12 @@ const {uploadFileToS3, getBucketListFromS3, getPresignedURL} = require('./s3-ser
 
 async function s3Upload (file_path,filename) {
     try{
-        await uploadFileToS3(file_path,filename, 'ffmpeg-node');
-        Promise.resolve('fine')
+        await uploadFileToS3(file_path,filename, 'ffmpeg-node',()=>{
+            Promise.resolve('fine')
+        });
+        
     } catch(ex) {
-        Promise.reject(err)
+       // Promise.reject(err)
     }
 }
 
