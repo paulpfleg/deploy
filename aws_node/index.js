@@ -21,7 +21,8 @@ app.set('view engine', 'ejs');
 // --- Constands ---
 
 const PORT = 8080;
-const PATH_FFMPEG = "http://localhost:8080/convert/1"
+const IP_backende = process.env.IP || "127.0.0.1"
+const PORT_backend = 8081;
 
 
 // --- Get Endpoints for Front End ---
@@ -94,7 +95,7 @@ next()
 
 async function call(param1,param2) {
   var options = {
-    url: 'http://localhost:8081/convert/',
+    url: `http://${IP_backende}:${PORT_backend}/convert/`,
     json: true,
     body: {
       "bitrate": param1.body.bitrate,
