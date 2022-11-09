@@ -53,6 +53,7 @@ app.post('/convert/', (req,res) => {
     const {codec} = req.body;
     const {width} = req.body;
     const {height} = req.body;
+    const {colourspace} = req.body;
     
 
     console.log(req.body);
@@ -86,7 +87,7 @@ app.post('/convert/', (req,res) => {
 
         try{  
 
-            converted=Convert.convert(filename,bitrate,outputName,outputFormat,codec,width,height);
+            converted=Convert.convert(filename,bitrate,outputName,outputFormat,codec,width,height,colourspace);
         
             
         }catch (exception){
@@ -98,15 +99,16 @@ app.post('/convert/', (req,res) => {
         }
     
 
-        s3Controller.s3Upload(`${__dirname}/output/${outputName}.${outputFormat}`,`${outputName}.${outputFormat}`)
+        s3Controller.s3Upload(`${__dirname}/output/${outputName}.${outputFormat}`,`${outputName}.${outputFormat}`,converted)
             .then( (converted) => {
-                unlinkFiles(outputName,outputFormat)
                 res.send({
                     status : "ok",
                     convert: `Converted ${filename} with a bitrate of ${bitrate}`,
-                    executed: `${converted.ffmpeg_command}`
+                    executed: converted
                     })
+                unlinkFiles(outputName,outputFormat,filename,res);
                 }
+                
             )
             .catch((response) => {
                 res.send({
@@ -114,7 +116,7 @@ app.post('/convert/', (req,res) => {
                     error_code: "002",
                     error_message : "file upload error"
                 })
-                unlinkFiles(outputName,outputFormat);
+                unlinkFiles(outputName,outputFormat,filename,res);
             })
 
         //fs.unlinkSync(`${__dirname}/output/${outputName}.${outputFormat}`);
@@ -125,17 +127,25 @@ app.post('/convert/', (req,res) => {
 
 });
 
-function unlinkFiles(name,format) {
+function unlinkFiles(name,format,filename,ans) {
 
-    try{
-        fs.unlinkSync(`${__dirname}/output/${name}.${format}`);
-        fs.unlinkSync(`${__dirname}/input/${name}`);
-        return true
-    }catch(exception){
-        res.send({
-            status : "error",
-            error_code: "003",
-            error_message : "local file deletation error"
-        })
+    try {
+    
+
+        try{
+            fs.unlinkSync(`${__dirname}/output/${name}.${format}`);
+            fs.unlinkSync(`${__dirname}/input/${filename}`);
+            return true
+        }catch(exception){
+            ans.send({
+                status : "error",
+                error_code: "003",
+                error_message : "local file deletation error"
+            })
+        }
+    } catch (error) {
+        return 0
     }
+
+    
 }

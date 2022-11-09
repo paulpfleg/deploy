@@ -1,10 +1,10 @@
 const formidable = require('formidable');
 const {uploadFileToS3, getBucketListFromS3, getPresignedURL} = require('./s3-service');
 
-async function s3Upload (file_path,filename) {
+async function s3Upload (file_path,filename,converted) {
     try{
         await uploadFileToS3(file_path,filename, 'ffmpeg-node',()=>{
-            Promise.resolve('fine')
+            Promise.resolve(converted)
         });
         
     } catch(ex) {
