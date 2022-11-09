@@ -52,8 +52,6 @@ app.post('/parameters', function(req,res){
 
     console.log(req.body);
 
- 
-
     //var prove = sendRequest();
     call(req,res);
    
@@ -106,7 +104,8 @@ async function call(param1,param2) {
       "filename": param1.body.filename,
       "codec": param1.body.codec,
       "width": param1.body.width,
-      "height": param1.body.height
+      "height": param1.body.height,
+      "colourspace":param1.body.colourspace
     }
   };
 

@@ -42,67 +42,90 @@
             <div id="spinner_here"></div>
             
 
-            <div class="row">           
+            <div class="p-4">           
                               
-                        <form id="convertForm" action="/parameters" method="post">
+                        <form class="" id="convertForm" action="/parameters" method="post">
 
-                                <div class="w-75 mx-auto mb-3">
+                                <div class="mb-3 p-5">
 
-                                    <div class="form-row">
-                                        <div class="col mb-3">
-                                            <label for="bitrate" class="control-label">Bitrate in Mb/s:</label>
-                                            <input class=" form-control" type="number" name="bitrate" id="bitrate" placeholder="Bitrate" min="0.01" max="50">
-                                        </div>
-                                        <div class="col mb-3">
-                                            <label for="outputName" class="control-label">Output Filename:</label>
-                                            <input class=" form-control" type="text" name="outputName" id="outputName" placeholder="Output Name" required>
-                                        </div>
-                                    </div>
 
                                     
+                                        <div class="form-row">
+                                            <div class="col mb-3">
+                                                <label for="bitrate" class="control-label">Bitrate in Mb/s:</label>
+                                                <input class=" form-control" type="number" name="bitrate" id="bitrate" placeholder="Bitrate" min="0.01" max="50">
+                                            </div>
+                                            <div class="col mb-3">
+                                                <label for="outputName" class="control-label">Output Filename:</label>
+                                                <input class=" form-control" type="text" name="outputName" id="outputName" placeholder="Output Name" required>
+                                            </div>
+                                        </div>
                                     
-                                    <div class="form-row">
-                                        <div class="col mb-3">
-                                            <label for="outputFormat" class="control-label">Video Container:</label>
-                                            <select class="form-control " placeholder="default: mp4" name="outputFormat" id="outputFormat" required onChange="visibility()">
-                                                <option>mp4</option>
-                                                <option>mov</option>
-                                               <!--  <option>avi</option> -->
-                                                <option>mkv</option>
-                                                <option>mxf</option>
-                                            </select>
+                                        
+                                        
+                                        <div class="form-row">
+                                            <div class="col mb-3">
+                                                <label for="outputFormat" class="control-label">Video Container:</label>
+                                                <select class="form-control " placeholder="default: mp4" name="outputFormat" id="outputFormat" required onChange="visibility()">
+                                                    <option>mp4</option>
+                                                    <option>mov</option>
+                                                <!--  <option>avi</option> -->
+                                                    <option>mkv</option>
+                                                    <option>mxf</option>
+                                                </select>
+                                            </div>
+
+                                        
+
+                                            <div class="col mb-3">
+                                                <label for="codec" class="control-label">Video Codec:</label>
+                                                <select class="form-control" placeholder="default: h264" name="codec" id="codec" required>
+                                                    <option id="h264">h264</option>
+                                                    <option id="hevc">hevc</option>
+                                                    <option id="vp9">vp9</option>
+                                                    <option id="prores">prores</option>
+                                                    <option id="dnxhd">dnxhd</option>
+                                                </select>
+                                            </div>
+
                                         </div>
 
-                                    
-
-                                        <div class="col mb-3">
-                                            <label for="codec" class="control-label">Video Codec:</label>
-                                            <select class="form-control" placeholder="default: h264" name="codec" id="codec" required>
-                                                <option id="h264">h264</option>
-                                                <option id="hevc">hevc</option>
-                                                <option id="vp9">vp9</option>
-                                                <option id="prores">prores</option>
-                                                <option id="dnxhd">dnxhd</option>
-                                            </select>
+                                        <div class="form-row">
+                                            
+                                                <div class="col mb-3">
+                                                    <div id="collapseExample" class="collapse">
+                                                        <label for="width" class="control-label">Target width:</label>
+                                                        <input type="number" class="form-control" placeholder="leave blank for original" name="width" id="width" min="200" max="4096">
+                                                    </div>
+                                                </div>
+                                            
+                                                <div class="col mb-3">
+                                                    <div id="collapseExample" class="collapse">
+                                                        <label for="height" class="control-label">Target height:</label>
+                                                        <input type="number" class="form-control" placeholder="leave blank for original" name="height" id="height" min="200" max="2304">
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col mb-3">
+                                                    <div id="collapseExample" class="collapse">
+                                                        <label for="colourspace" class="control-label">Color Space:</label>
+                                                        <select class="form-control" placeholder="default:" name="colourspace" id="colourspace">
+                                                            <option id=""> </option>
+                                                            <option id="bt709">bt709</option>
+                                                            <option id="bt2020">bt2020</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                         </div>
 
-                                    </div>
 
-                                    <div class="form-row">
-                                        <div class="col mb-3">
-                                            <label for="width" class="control-label">Target width:</label>
-                                            <input type="number" class="form-control" placeholder="leave blank for original" name="width" id="width" min="200" max="4096">
-                                        </div>
-                                        <div class="col mb-3">
-                                            <label for="height" class="control-label">Target height:</label>
-                                            <input type="number" class="form-control" placeholder="leave blank for original" name="height" id="height" min="200" max="2304">
-                                        </div>
-                                    </div>
                                 
-                                    
-
-                                
-
+                                    <div class="form-row ">
+                                        <button class="btn btn-secondary mx-auto btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                            advanced options
+                                        </button>
+                                    </div>
+                                                                
                                     <input id= "hidden_url" type="hidden" name="url">
                                     <input id= "hidden_filename" type="hidden" name="filename">
                                 
@@ -166,14 +189,16 @@
                     list = data;
                     
                     const objectList = data.map((item, index) => {
+                      // const charEdit=(item.lastModified.charAt(21)+1) //prepared for changing the time zone
+                      // item.lastModified.charAt(21)=charEdit
                         return `<div class="mb-3 card" onclick="sendForm(${index})">
                             <div class="card-header">
                                             <h4 class="card-title">${item.key}</h4> 
                                         </div>
                                         <div class="card-body">
-                                            File Size: ${item.size} 
+                                            Size: ${item.size} 
                                             <br>
-                                            File Modified: ${item.lastModified.slice(0,-8).replace(/-/g, ".").replace(/T/g, " ")}
+                                            Modified: ${item.lastModified.slice(0,-8).replace(/-/g, ".").replace(/T/g, " ")}
                                         </div>
                         </div>
                         <br>`
@@ -188,7 +213,8 @@
                     const url = getData(`/get-object-url/${fileName}`, (url) => {
                         document.getElementById("hidden_url").value = url;
                         document.getElementById("hidden_filename").value = fileName;
-                        document.getElementById('welcome').innerHTML = "Request in progress"
+                        document.getElementById('welcome').innerHTML = "Request in send!";
+                        window.scrollTo(0, 0);
                         document.getElementById('forUser').innerHTML = 
                             `
                             <div class="spinner-border m-3 d-flex justify-content-center" style="width: 5rem; height: 5rem;" role="status">
