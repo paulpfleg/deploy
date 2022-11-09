@@ -2,12 +2,15 @@ const express = require('express');
 const bodyParser = require("body-parser");
 const request = require('request');
 const ejs = require('ejs');
+const path = require('path'); 
 
 const app = express();
 const s3Controller = require('./src/s3-controller');
 
 //middleware logging function
 app.use(logger)
+
+app.set('views', path.join(__dirname, 'public'));
 
 app.use(express.json())
 //app.use(express.static(__dirname + "/public"));
