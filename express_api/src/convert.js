@@ -39,7 +39,7 @@ function convert(filename,bitrate,outputName,outputFormat,codec,width,height,col
             -movflags use_metadata_tags -map_metadata 0 \
             ${outputName ? `${outputPath}/${outputName}.${outputFormat}` : `${outputPath}/video.${outputFormat}`} \
              `
-        
+/*         
         const ffprobe_bitrate = `
         ffprobe -v quiet -select_streams v:0 \
         -print_format json \
@@ -52,7 +52,7 @@ function convert(filename,bitrate,outputName,outputFormat,codec,width,height,col
         -select_streams v -print_format json -show_frames -read_intervals "%+#1" \
         -show_entries "frame=color_space,color_primaries,color_transfer,side_data_list,pix_fmt" -i ${outputPath}/${outputName}.${outputFormat}
         `
-        
+ */        
         child_process.execSync(`${ffmpeg_convert}`), { //&& ${second_pass}
 
             stdio: Object.values({
@@ -64,7 +64,7 @@ function convert(filename,bitrate,outputName,outputFormat,codec,width,height,col
               })
             };
 
-          child_process.execSync(`${ffprobe_bitrate}`, {
+/*           child_process.execSync(`${ffprobe_bitrate}`, {
                 stdio: Object.values({
                 //how to handle the input/output of the child pocess
                 //just handle same as main
@@ -82,7 +82,7 @@ function convert(filename,bitrate,outputName,outputFormat,codec,width,height,col
             stdout: 'inherit',
             stderr: 'inherit',
             })
-        });
+        }); */
 
       
 
