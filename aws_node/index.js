@@ -6,6 +6,7 @@ const path = require('path');
 
 const app = express();
 const s3Controller = require('./src/s3-controller');
+const { timeStamp, time } = require('console');
 
 //middleware logging function
 app.use(logger)
@@ -24,7 +25,7 @@ app.set('view engine', 'ejs');
 // --- Constands ---
 
 const PORT = 8080;
-const IP_backende = process.env.IP || "127.0.0.1"
+const IP_backende = process.env.IP || "192.168.1.9"
 const PORT_backend = 8081;
 
 
@@ -54,7 +55,8 @@ app.get('/get-object-url/:key', s3Controller.getSignedUrl);
 
 app.post('/parameters', function(req,res){
 
-    console.log(req.body);
+    console.log("--- Incomming request --- %j",req.body);
+    console.log('---- TIME:' + stamp() );
 
     //var prove = sendRequest();
     call(req,res);
@@ -113,7 +115,10 @@ async function call(param1,param2) {
     }
   };
 
+    console.log("--- Out Going Request --- %j" , options.body);
+    console.log("to %j  ---- TIME " + stamp(),  options.url);
       var prove = await sendRequest(options);
+      
       console.log("Response: %j", prove.body);
       if (prove.body.status === "ok") {
         param2.sendFile(__dirname + '/public/sucess.html');
@@ -122,4 +127,25 @@ async function call(param1,param2) {
         param2.render('error.ejs', { error: prove.body.error_message });
       }
 
+}
+
+function stamp(){
+  const dateObject = new Date();
+  // current date
+  // adjust 0 before single digit date
+  const date = (`0 ${dateObject.getDate()}`).slice(-2);
+   
+  // current month
+  const month = (`0 ${dateObject.getMonth() + 1}`).slice(-2);
+   
+  // current year
+  const year = dateObject.getFullYear();
+   
+  // current hours
+  const hours = dateObject.getHours();
+   
+  // current minutes
+  const minutes = dateObject.getMinutes();
+
+  return(`${hours}:${minutes}`)
 }
