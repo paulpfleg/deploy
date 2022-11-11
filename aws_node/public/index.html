@@ -66,7 +66,7 @@
                                         <div class="form-row">
                                             <div class="col mb-3">
                                                 <label for="outputFormat" class="control-label">Video Container:</label>
-                                                <select class="form-control " placeholder="default: mp4" name="outputFormat" id="outputFormat" required onChange="visibility()">
+                                                <select class="form-control " placeholder="default: mp4" name="outputFormat" id="outputFormat" required onChange="visibility(`outputFormat`,`codec`,objectCodec)">
                                                     <option>mp4</option>
                                                     <option>mov</option>
                                                 <!--  <option>avi</option> -->
@@ -79,7 +79,7 @@
 
                                             <div class="col mb-3">
                                                 <label for="codec" class="control-label">Video Codec:</label>
-                                                <select class="form-control" placeholder="default: h264" name="codec" id="codec" required>
+                                                <select class="form-control" placeholder="default: h264" name="codec" id="codec" required onChange="visibility(`codec`,`profile`,objectProfile)">
                                                     <option id="h264">h264</option>
                                                     <option id="hevc">hevc</option>
                                                     <option id="vp9">vp9</option>
@@ -173,6 +173,67 @@
 
         <script>
             let list = [];
+            const objectCodec = {
+                    mp4 : { 
+                            h264: "h264",
+                            hevc: "hevc",
+                            vp9: "vp9"},
+                    mov : {
+                            h264: "h264",
+                            hevc: "hevc",
+                            prores:"prores"},
+                    mkv : {
+                            h264: "h264",
+                            hevc: "hevc",
+                            dnxhd:"dnxhd"},
+                    mxf : {
+                            h264: "h264",
+                            hevc: "hevc",
+                            prores:"prores",
+                            dnxhd:"dnxhd"},
+                    
+                    };
+
+            const objectProfile = {
+                    h264    : { 
+                        "Baseline"              : "baseline", 
+                        "Main"                  : "main",
+                        "High 10"               : "high10",
+                        "High 422"              : "high422",
+                        "High 444"              : "high444",
+                        },
+                    hevc    : {
+                        "Baseline"              : "baseline", 
+                        "Main"                  : "main",
+                        "High 10 "              : "high10",
+                        "High 422"              : "high422",
+                        "High 444"              : "high444",
+                        },
+                    vp9     : {
+                        "Baseline"              : "unknown", 
+                        "Main"                  : "profile0",
+                        "High"                  : "profile1",
+                        "Very high"             : "profile2",
+                        "Extra high"            : "profile3",
+                        },
+                    prores : {
+                        "ProRes 422, Proxy"     : 0,
+                        "ProRes 422, LT"        : 1,
+                        "ProRes 422, Standard"  : 2,
+                        "ProRes 422, HQ"        : 3,
+                        "ProRes 4444"           : 4,
+                        "ProRes 4444 XQ"        : 5,
+                        },
+                    dnxhd   : {
+                        "DNxHD"                 : 0,
+                        "DNxHR LB"              : 1,
+                        "DNxHR SQ"              : 2,
+                        "DNxHR HQ"              : 3,
+                        "DNxHR HQX"             : 4,
+                        "DNxHR 444"             : 5,
+                        },
+                    
+                    };
 
             function saveFile(event) {
                 const xhr = new XMLHttpRequest();
@@ -192,7 +253,7 @@
 
             function loadData() {
                 getBucketObjectList();
-                visibility();
+                visibility("outputFormat","codec",objectCodec);
             }
 
             function getBucketObjectList() {
@@ -303,43 +364,20 @@
 
             }
 
-            function visibility() {
+            function visibility(controller,selectItemId,mapObject) {
                 
-                var outputFormat = document.getElementById("outputFormat").value;
-                select=document.getElementById("codec");
+                var depend = document.getElementById(`${controller}`).value;
+                var select=document.getElementById(`${selectItemId}`);
                 select.innerHTML = '';
 
-                const codecVis = {
-                    mp4 : { 
-                            h264: true,
-                            hevc: true,
-                            vp9: true},
-                    mov : {
-                            h264: true,
-                            hevc: true,
-                            prores:true},
-                    mkv : {
-                            h264: true,
-                            hevc: true,
-                            dnxhd:true},
-                    mxf : {
-                            h264: true,
-                            hevc: true,
-                            prores:true,
-                            dnxhd:true},
-                    
-                    };
-
-                for (const [key, value] of Object.entries(codecVis)) {
-                    if(key == outputFormat){
-                        var subobject=codecVis[`${outputFormat}`];
-                        for (const [codec,truefalse] of Object.entries(subobject)) {
-                            if(truefalse){
+                for (const [key, value] of Object.entries(mapObject)) {
+                    if(key == depend){
+                        var subobject=mapObject[`${depend}`];
+                        for (const [text,value] of Object.entries(subobject)) {
                                 var option = document.createElement("option");
-                                option.text = `${codec}`;
-                                option.value =`${codec}`;
+                                option.text = `${text}`;
+                                option.value =`${value}`;
                                 select.appendChild(option);
-                            }
                         }   
                     } 
                 }

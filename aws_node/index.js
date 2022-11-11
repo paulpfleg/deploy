@@ -111,7 +111,8 @@ async function call(param1,param2) {
       "codec": param1.body.codec,
       "width": param1.body.width,
       "height": param1.body.height,
-      "colourspace":param1.body.colourspace
+      "colourspace":param1.body.colourspace,
+      "profile": param1.body.profile,
     }
   };
 

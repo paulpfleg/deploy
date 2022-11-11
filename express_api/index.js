@@ -54,6 +54,7 @@ app.post('/convert/', (req,res) => {
     const {width} = req.body;
     const {height} = req.body;
     const {colourspace} = req.body;
+    const {profile} = req.body;
     
 
     console.log(req.body);
@@ -87,7 +88,7 @@ app.post('/convert/', (req,res) => {
 
         try{  
 
-            converted=Convert.convert(filename,bitrate,outputName,outputFormat,codec,width,height,colourspace);
+            converted=Convert.convert(filename,bitrate,outputName,outputFormat,codec,width,height,colourspace,profile);
         
             
         }catch (exception){

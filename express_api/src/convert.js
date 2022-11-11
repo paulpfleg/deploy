@@ -11,7 +11,7 @@ const { path } = require('express/lib/application');
 const fs = require('fs');
 const path_mod = require('path');
 
-function convert(filename,bitrate,outputName,outputFormat,codec,width,height,colourspace){        
+function convert(filename,bitrate,outputName,outputFormat,codec,width,height,colourspace,profile){        
     try {
 
       // if no path entered or no path exists at path exit without outputs
@@ -34,6 +34,7 @@ function convert(filename,bitrate,outputName,outputFormat,codec,width,height,col
             -i ${fileToConvert} \
             ${bitrate ? `-b:v ${bitrate}M` : ``} \
             ${codec ? `-c:v ${codec}` : ``} \
+            ${profile ? `-profile ${profile}` : ``} \
             ${(width && height) ? `-vf scale=${width}:${height}` : ``} \
             ${colourspace ? `-vf "colorspace=${colourspace}"` : ``} \
             -movflags use_metadata_tags -map_metadata 0 \
