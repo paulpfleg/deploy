@@ -105,7 +105,9 @@
                                                         <input type="number" class="form-control" placeholder="leave blank for original" name="height" id="height" min="200" max="2304">
                                                     </div>
                                                 </div>
-                                                
+                                            </div>
+
+                                            <div class="form-row">
                                                 <div class="col mb-3">
                                                     <div id="collapseExample" class="collapse">
                                                         <label for="colourspace" class="control-label">Color Space:</label>
@@ -117,7 +119,16 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                        </div>
+
+                                                <div class="col mb-3">
+                                                    <div id="collapseExample" class="collapse">
+                                                        <label for="profile" class="control-label">Exp.: codec profile:</label>
+                                                        <select class="form-control" placeholder="default:" name="profile" id="profile">
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
 
 
                                 
@@ -194,7 +205,7 @@
                       // item.lastModified.charAt(21)=charEdit
                         return `<div class="mb-3 card" onclick="sendForm(${index})">
                             <div class="card-header">
-                                            <h4 class="card-title">${item.key}</h4> 
+                                            <b class="card-title">${item.key}</b> 
                                         </div>
                                         <div class="card-body">
                                             Size: ${item.size} 
@@ -293,42 +304,46 @@
             }
 
             function visibility() {
-
-                
                 
                 var outputFormat = document.getElementById("outputFormat").value;
+                select=document.getElementById("codec");
+                select.innerHTML = '';
 
-                console.log(outputFormat);
-                if (outputFormat == "mp4" ){
-                    document.getElementById("h264").style.display = "inline";
-                    document.getElementById("hevc").style.display = "inline";
-                    document.getElementById("vp9").style.display = "inline";
-                    document.getElementById("prores").style.display = "none";
-                    document.getElementById("dnxhd").style.display = "none";
-                }
-                else if (outputFormat == "mov") {
-                    document.getElementById("h264").style.display = "inline";
-                    document.getElementById("hevc").style.display = "inline";
-                    document.getElementById("vp9").style.display = "none";
-                    document.getElementById("prores").style.display = "inline";
-                    document.getElementById("dnxhd").style.display = "none";
-                }
+                const codecVis = {
+                    mp4 : { 
+                            h264: true,
+                            hevc: true,
+                            vp9: true},
+                    mov : {
+                            h264: true,
+                            hevc: true,
+                            prores:true},
+                    mkv : {
+                            h264: true,
+                            hevc: true,
+                            dnxhd:true},
+                    mxf : {
+                            h264: true,
+                            hevc: true,
+                            prores:true,
+                            dnxhd:true},
+                    
+                    };
 
-                else if (outputFormat == "mkv") {
-                    document.getElementById("h264").style.display = "inline";
-                    document.getElementById("hevc").style.display = "inline";
-                    document.getElementById("vp9").style.display = "none";
-                    document.getElementById("prores").style.display = "none";
-                    document.getElementById("dnxhd").style.display = "inline";
+                for (const [key, value] of Object.entries(codecVis)) {
+                    if(key == outputFormat){
+                        var subobject=codecVis[`${outputFormat}`];
+                        for (const [codec,truefalse] of Object.entries(subobject)) {
+                            if(truefalse){
+                                var option = document.createElement("option");
+                                option.text = `${codec}`;
+                                option.value =`${codec}`;
+                                select.appendChild(option);
+                            }
+                        }   
+                    } 
                 }
-
-                else if (outputFormat == "mxf") {
-                    document.getElementById("h264").style.display = "inline";
-                    document.getElementById("hevc").style.display = "inline";
-                    document.getElementById("vp9").style.display = "none";
-                    document.getElementById("prores").style.display = "inline";
-                    document.getElementById("dnxhd").style.display = "inline";
-                }
+                
             }
 
             async function getData(url, cb) {
