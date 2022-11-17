@@ -14,22 +14,6 @@ const path_mod = require('path');
 function convert(filename,bitrate,outputName,outputFormat,codec,width,height,colourspace,profile){        
     try {
 
-      // if no path entered or no path exists at path exit without outputs
-
-      fileToConvert = path_mod.join(__dirname, '..', 'input', `${filename}`)
-      outputPath = path_mod.join(__dirname, '..', 'output')
-
-      if (!filename || (filename && !fs.existsSync(fileToConvert))) {
-        throw "File not found on convert node!";}
-
-        const second_pass = "";
-
-        if (second_pass) {
-          second_pass = `ffmpeg -i ${fileToConvert} -b:v 0.1M -c:v h264 -vf "colorspace = bt709" bt709.mov
-             `
-            }
-
-
         const ffmpeg_convert = `ffmpeg -y \
             -i ${fileToConvert} \
             ${bitrate ? `-b:v ${bitrate}M` : ``} \

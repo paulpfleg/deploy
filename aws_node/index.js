@@ -25,7 +25,7 @@ app.set('view engine', 'ejs');
 // --- Constands ---
 
 const PORT = 8080;
-const IP_backende = process.env.IP || "192.168.1.9"
+const IP_backende = process.env.IP || "127.0.0.1"
 const PORT_backend = 8081;
 
 
