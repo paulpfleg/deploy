@@ -99,20 +99,28 @@ next()
 }
 
 async function call(param1,param2) {
+
+  const body = param1.body
   var options = {
     url: `http://${IP_backende}:${PORT_backend}/convert/`,
     json: true,
     body: {
-      "bitrate": param1.body.bitrate,
-      "outputName": param1.body.outputName,
-      "outputFormat": param1.body.outputFormat,
-      "url": param1.body.url,
-      "filename": param1.body.filename,
-      "codec": param1.body.codec,
-      "width": param1.body.width,
-      "height": param1.body.height,
-      "colourspace":param1.body.colourspace,
-      "profile": param1.body.profile,
+      "bitrate":      body.bitrate,
+      "outputName":   body.outputName,
+      "outputFormat": body.outputFormat,
+      "url":          body.url,
+      "filename":     body.filename,
+      "codec":        body.codec,
+      "width":        body.width,
+      "height":       body.height,
+      "colourspace":  body.colourspace,
+      "profile":      body.profile,
+      "peaklum":      body.peaklum,
+      "tonemap":      body.tonemap,
+      "primaries":    body.primaries,
+      "matrix":       body.matrix,
+      "transfer":     body.transfer,
+      "advanced_colour":body.advanced_colour
     }
   };
 
