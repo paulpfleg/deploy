@@ -119,17 +119,28 @@ ${outputName ? `${outputPath}/${outputName}.${outputFormat}` : `${outputPath}/vi
                 exec(ffmpeg_convert, (error, stdout, stderr) => {
                     if (error) {
                         console.error(`error: ${error.message}`);
+                        if (still_to_send){ 
+                            res.send({
+                                status : "error",
+                                error_code: "001",
+                                error_message : "ffmpeg command error"
+                            })
+                        still_to_send = false
+                        }
+
                         return;
                     }
 
                     if (stderr) {
                         console.error(`stderr: ${stderr}`);
+                        console.log("Upload has begun!")
                     }
+
+                    stdout ? console.error(`stdout: ${stdout}`) : {};
 
                     s3Controller.s3Upload(`${__dirname}/output/${outputName}.${outputFormat}`,`${outputName}.${outputFormat}`,converted)
                     .then( (converted) => {
-                        console.log("Upload has begun!--")
-
+                        
                         if (still_to_send){ 
                             res.send({
                                 status : "ok",

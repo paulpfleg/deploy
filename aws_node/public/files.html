@@ -162,9 +162,11 @@
                 async function deleteFile(index) {
                 const fileName = (list[index] || {}).key;
                 document.getElementById("hidden_filename").value = fileName;
+                if (confirm(`Do you really want to delete ${fileName}?`)) {
                 document.getElementById("deleteForm").submit(function(eventObj) {
                     return true;
                 });
+                } else return false;
                 }
 
 
