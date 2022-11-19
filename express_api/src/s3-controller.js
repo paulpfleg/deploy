@@ -28,19 +28,7 @@ async function s3Get (req, res) {
     }
 }
 
-async function getSignedUrl(Key) {
-    try {
-        const {key} = Key;
-        const url = await getPresignedURL('ffmpeg-node', key);
-        return url;
-
-    } catch(ex) {
-        return('');
-    }
-}
-
 module.exports = {
     s3Upload,
     s3Get,
-    getSignedUrl
 }

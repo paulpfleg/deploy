@@ -66,6 +66,11 @@ app.post('/parameters', function(req,res){
    
 });
 
+  //starts the node Server
+  app.listen(PORT, () => {
+    console.log(`its alive on http://localhost:${PORT}`);
+  });
+
 
 function sendRequest(options) {
   return new Promise((resolve, reject) => {
@@ -90,10 +95,6 @@ function sendRequest(options) {
   });
 }
 
-app.listen(PORT, () => {
-    console.log(`its alive on http://localhost:${PORT}`);
-});
-
 // Logger function mainly to showcase middleware
 function logger (req,res,next) {
 console.log("Site "+req.originalUrl+" has been requested")
@@ -103,6 +104,8 @@ next()
 async function call(param1,param2) {
 
   const body = param1.body
+
+  // maps req. parameters to new json object, to send it to the backend
   var options = {
     url: `http://${IP_backende}:${PORT_backend}/convert/`,
     json: true,
@@ -131,6 +134,7 @@ async function call(param1,param2) {
     console.log("--- Out Going Request --- %j" , options.body);
     console.log("to %j  ---- TIME " + stamp(),  options.url);
 
+    //get time, when request is send
     var startTime = performance.now();
 
     var prove = await sendRequest(options);
@@ -147,7 +151,7 @@ async function call(param1,param2) {
         var endTime = performance.now()
       }
 
-      execTime= `\n Current Time: ${stamp()} Execution time: ${endTime-startTime}; Status:${prove.body}`
+      execTime= `\n Current Time: ${stamp()} Execution time: ${endTime-startTime}; Status:${prove.body.error_message ? prove.body.error_message : prove.body.status}`
       
       fs.appendFile("./logging/execution.txt",execTime, function(err) {
         if(err) {
@@ -156,6 +160,8 @@ async function call(param1,param2) {
     
         console.log("The file was saved!");
       }); 
+
+
     
 }
 

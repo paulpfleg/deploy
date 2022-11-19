@@ -31,7 +31,7 @@
           
 
         <div class="container" >
-            <div class="jumbotron mt-4">
+            <div style="background:#2a6bb7; color: white !important" class="jumbotron mt-4">
                 <div class="mx-auto" style="width: 20rem;">
                     <div>
                         <h1>Manage Files</h1>
@@ -44,7 +44,7 @@
 
             <div class="col-sm-4 mx-auto mb-3">
                 <h2>Upload Files</h2>
-                <input type="file" id="s3-file" onchange="saveFile(this)"/>
+                <input  type="file" id="s3-file" onchange="saveFile(this)"/>
             </div>
 
             <div class="row">
@@ -108,7 +108,7 @@
                         const objectList = data.map((item, index) => {
                             return `
                             <div class="mb-3 card " onclick="downloadFile(${index})">
-                                        <div class="card-header">
+                                        <div style="background:#2a6bb7; color: white !important" class="card-header">
                                             <b class="card-title">${item.key}</b> 
                                         </div>
                                         <div class="card-body">
@@ -133,7 +133,7 @@
                         const objectList = data.map((item, index) => {
                             return `
                             <div class="mb-3 card" onclick="deleteFile(${index})">
-                                        <div class="card-header">
+                                        <div class="card-header" style="background:#2a6bb7; color: white !important">
                                             <b class="card-title">${item.key}</b> 
                                         </div>
                                         <div class="card-body">

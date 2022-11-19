@@ -28,7 +28,7 @@
 
         <div class="container">
 
-            <div class="jumbotron mt-4">
+            <div style="background:#2a6bb7; color: white !important" class="jumbotron mt-4">
                 <div class="mx-auto" style="width: 20rem;">
                     <div>
                         <h1 id="welcome" class="text-center">Convert Files</h1>
@@ -217,13 +217,13 @@
                                                     </div>
 
                                                     <div class="form-row collapse collapse_advanced mb-3">
-                                                        <button class="btn btn-secondary mx-auto btn-sm" type="button" data-toggle="collapse" data-target=".colourspace" aria-expanded="false" aria-controls="colourspace" onclick=hideColourspace()>
-                                                            expert colour option
+                                                        <button style="background:#2a6bb7; color: white !important" class="btn btn-secondary mx-auto btn-sm" type="button" data-toggle="collapse" data-target=".colourspace" aria-expanded="false" aria-controls="colourspace" onclick=hideColourspace()>
+                                                            expert colours
                                                         </button>
                                                     </div>
 
                                                     <div class="form-row ">
-                                                        <button class="btn btn-secondary mx-auto btn-sm" type="button" data-toggle="collapse" data-target=".collapse_advanced" aria-expanded="false" aria-controls="collapseExample">
+                                                        <button style="background:#2a6bb7; color: white !important" class="btn btn-secondary mx-auto" type="button" data-toggle="collapse" data-target=".collapse_advanced" aria-expanded="false" aria-controls="collapseExample">
                                                             advanced options
                                                         </button>
                                                     </div>
@@ -354,12 +354,14 @@
                 xhr.send(formData);
             }
 
+            //cuntion to run when page is loaded
             function loadData() {
                 getBucketObjectList();
                 visibility(`codec`,`profile`,objectProfile);
                 visibility("outputFormat","codec",objectCodec);
             }
 
+            //renders the S3 Buckets Data in Card elements
             function getBucketObjectList() {
                 getData('/all-files', (data = []) => {
                     data = JSON.parse(data);
@@ -369,7 +371,7 @@
                       // const charEdit=(item.lastModified.charAt(21)+1) //prepared for changing the time zone
                       // item.lastModified.charAt(21)=charEdit
                         return `<div class="mb-3 card" onclick="sendForm(${index})">
-                            <div class="card-header">
+                            <div style="background:#2a6bb7; color: white !important" class="card-header">
                                             <b class="card-title">${item.key}</b> 
                                         </div>
                                         <div class="card-body">
@@ -393,11 +395,12 @@
                         document.getElementById('welcome').innerHTML = "Request send!";
                         window.scrollTo(0, 0);
                         document.getElementById('forUser').innerHTML = 
+                        //renders a loading spinner when file was send
                             `
                             <div class="spinner-border m-3 d-flex justify-content-center" style="width: 5rem; height: 5rem;" role="status">
-                            <span class="sr-only">Loading...</span>
+                            <span style="background:#2a6bb7; color: white !important"  class="sr-only">Loading...</span>
                             </div>
-                            <button type="button" class="btn btn-outline-dark btn-sm" onclick="location.href='/';">Next Request</button>
+                            <button type="button" style="color: white !important" class="btn btn-outline-light btn-sm" onclick="location.href='/';">Next Request</button>
                             `
                         document.getElementById("convertForm").submit(function(eventObj) {
                             return true;
@@ -409,7 +412,7 @@
                 }
             }
 
-            
+            //adds basic client side form validation
             function formValidation(){
                 var breakFunc = 1;
                 var outputFormat = document.getElementById('outputFormat').value;
@@ -468,8 +471,8 @@
 
             }
 
+            // shows only possible options for codecs and containers / codecs and profiles
             function visibility(controller,selectItemId,mapObject) {
-                
                 var depend = document.getElementById(`${controller}`).value;
                 var select=document.getElementById(`${selectItemId}`);
                 select.innerHTML = '';
