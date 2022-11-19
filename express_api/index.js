@@ -47,6 +47,9 @@ app.post("/", function(req, res) {
   // POST Request
 app.post('/convert/', (req,res) => {
 
+
+    
+
 //uses Data from Requestbody
     const {bitrate}         = req.body;
     const {outputName}      = req.body;
@@ -65,6 +68,7 @@ app.post('/convert/', (req,res) => {
     const {transfer}        = req.body;
     const {advanced_colour}= req.body;
     
+
 
     const fileToConvert = path_mod.join(__dirname, 'input', `${filename}`);
     const outputPath = path_mod.join(__dirname, 'output'); 
@@ -93,6 +97,7 @@ ${outputName ? `${outputPath}/${outputName}.${outputFormat}` : `${outputPath}/vi
     console.log(req.body);
     console.log(ffmpeg_convert);
 
+if (checkString(ffmpeg_convert)){
     const file = fs.createWriteStream(`${__dirname}/input/${filename}`);
     const request = https.get(`${url}`, function(response) {
         response.pipe(file);
@@ -103,31 +108,14 @@ ${outputName ? `${outputPath}/${outputName}.${outputFormat}` : `${outputPath}/vi
                 file.close();
                 console.log("Download Completed");
             }catch (exception){
-
-                if (still_to_send){ 
-                    res.send({
-                        status : "error",
-                        error_code: "005",
-                        error_message : "file download error"
-                    })
-                still_to_send = false
-                }
-                
+                still_to_send=sendresponse(4,res,still_to_send);
             }
 
             try{
                 exec(ffmpeg_convert, (error, stdout, stderr) => {
                     if (error) {
                         console.error(`error: ${error.message}`);
-                        if (still_to_send){ 
-                            res.send({
-                                status : "error",
-                                error_code: "001",
-                                error_message : "ffmpeg command error"
-                            })
-                        still_to_send = false
-                        }
-
+                        still_to_send=sendresponse(1,res,still_to_send)
                         return;
                     }
 
@@ -155,46 +143,44 @@ ${outputName ? `${outputPath}/${outputName}.${outputFormat}` : `${outputPath}/vi
                         
                     )
                     .catch(() => {
-
-                        if (still_to_send){ 
-                            res.send({
-                                status : "error",
-                                error_code: "002",
-                                error_message : "file upload error"
-                            })
-                        still_to_send = false
-                        }
-
-                        
-                        if    (!unlinkFiles(outputName,outputFormat,filename)){
-                            if (still_to_send){ 
-                                res.send({
-                                    status : "error",
-                                    error_code: "003",
-                                    error_message : "local file deletation error"
-                                })
-                            still_to_send = false
-                            }
-                        };
-                   
+                        still_to_send=sendresponse(2,res,still_to_send);
+                 
                     })
-
-                    
+       
                 });
 
             }catch (exception){
-                if (still_to_send){ 
-                    res.send({
-                        status : "error",
-                        error_code: "001",
-                        error_message : "ffmpeg command error"
-                    })
-                still_to_send = false
-                }
+                still_to_send=sendresponse(1,res,still_to_send);
             }
         });
     });
+ }
 });
+
+function checkString(String){
+
+    const checkfor = [";","$","#","&","\\"];
+
+    for (var i = 0; i < checkfor.length; i++){
+        if (String.includes(checkfor[i])){
+            
+            return false
+        }
+    }
+    return true
+}
+
+function sendresponse(code,res,still_to_send){
+    if (still_to_send) {
+        const erroArray = ["ffmpeg command","file upload","local file deletation","file download","illegal sign"]
+        res.send({
+            status : "error",
+            error_code: `00${code}`,
+            error_message : `${erroArray[code]} error`
+        })
+        return false
+    }
+}
 
 function unlinkFiles(name,format,filename,ans) {
         console.log("Unlink has begun!")
@@ -203,6 +189,6 @@ function unlinkFiles(name,format,filename,ans) {
             fs.unlinkSync(`${__dirname}/input/${filename}`);
             return true
         }catch(exception){
-            return false
+            sendresponse(3,ans,false)
         }   
 }

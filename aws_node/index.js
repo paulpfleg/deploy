@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const request = require('request');
 const ejs = require('ejs');
 const path = require('path'); 
+const { performance } = require('perf_hooks');
+const fs = require('fs');
 
 const app = express();
 const s3Controller = require('./src/s3-controller');
@@ -124,18 +126,37 @@ async function call(param1,param2) {
     }
   };
 
+  var execTime = "";
+
     console.log("--- Out Going Request --- %j" , options.body);
     console.log("to %j  ---- TIME " + stamp(),  options.url);
-      var prove = await sendRequest(options);
+
+    var startTime = performance.now();
+
+    var prove = await sendRequest(options);
       
       console.log("Response: %j", prove.body);
       if (prove.body.status === "ok") {
         param2.sendFile(__dirname + '/public/sucess.html');
+
+        var endTime = performance.now()
       }
       else {
         param2.render('error.ejs', { error: prove.body.error_message });
+
+        var endTime = performance.now()
       }
 
+      execTime= `\n Current Time: ${stamp()} Execution time: ${endTime-startTime}; Status:${prove.body}`
+      
+      fs.appendFile("./logging/execution.txt",execTime, function(err) {
+        if(err) {
+            return console.log(err);
+        }
+    
+        console.log("The file was saved!");
+      }); 
+    
 }
 
 function stamp(){
