@@ -38,8 +38,8 @@ app.get("/", function(req, res) {
 // post endpoint for ffmpeg conversions
 app.post('/convert/', (req,res) => {
 
-    const {url}             = body;
-    const {filename}        = body;
+    const {url}             = req.body;
+    const {filename}        = req.body;
 
     var ffmpeg_convert = createFFmpegString(req.body,filename);
     var still_to_send = true;
@@ -47,7 +47,7 @@ app.post('/convert/', (req,res) => {
     console.log(req.body);
     console.log(ffmpeg_convert);
 
-if (checkString(ffmpeg_convert)){
+if (checkString(ffmpeg_convert.command)){
     const file = fs.createWriteStream(`${__dirname}/input/${filename}`);
     const request = https.get(`${url}`, function(response) {
         response.pipe(file); //after download completed close filestream
@@ -61,7 +61,7 @@ if (checkString(ffmpeg_convert)){
                 }
 
                 try{
-                    exec(ffmpeg_convert, (error, stdout, stderr) => {
+                    exec(ffmpeg_convert.command, (error, stdout, stderr) => {
                         if (error) {
                             console.error(`error: ${error.message}`);
                             still_to_send=sendresponse(1,res,still_to_send)
@@ -76,17 +76,17 @@ if (checkString(ffmpeg_convert)){
                         stdout ? console.log(`stdout: ${stdout}`) : {};
 
                         //upload the file to S3 Bucket -
-                        s3Controller.s3Upload(`${__dirname}/output/${outputName}.${outputFormat}`,`${outputName}.${outputFormat}`,converted)
+                        s3Controller.s3Upload(`${__dirname}/output/${ffmpeg_convert.outputPath}`,`${ffmpeg_convert.outputPath}`,converted)
                         .then( (converted) => {
                             if (still_to_send){ 
                                 res.send({
                                     status : "ok",
-                                    convert: `Converted ${filename} with a bitrate of ${bitrate}`,
+                                    convert: `Converted ${filename} with an saved it as ${ffmpeg_convert.outputPath}`,
                                     executed: converted
                                     })
                             still_to_send = false
                             }
-                            unlinkFiles(outputName,outputFormat,filename,res);
+                            unlinkFiles(ffmpeg_convert.outputPath,filename,res);
                             }
                         )
                         .catch(() => {
@@ -105,7 +105,7 @@ function createFFmpegString(body,filename){
 
     // take parameters from request body
     const {bitrate}         = body;
-    const {outputName}      = body;
+    var {outputName}      = body;
     const {outputFormat}    = body;
     const {codec}           = body;
     const {width}           = body;
@@ -122,7 +122,8 @@ function createFFmpegString(body,filename){
     var colour_string = '';
 
     const fileToConvert = path_mod.join(__dirname, 'input', `${filename}`);
-    const outputPath = path_mod.join(__dirname, 'output'); 
+    const outputPath = path_mod.join(__dirname, 'output');
+    const outputJoined=`${outputName}.${outputFormat}`;
 
     //build the substring used for collour space conversion
     if (advanced_colour) {
@@ -143,9 +144,14 @@ ${profile ? `-profile ${profile}` : ``} \
 ${(width && height) ? `-vf scale=${width}:${height}` : ``} \
 ${colourspace ? `-vf "colorspace=${colourspace}"` : ``} \
 -movflags use_metadata_tags -map_metadata 0 \
-${outputName ? `${outputPath}/${outputName}.${outputFormat}` : `${outputPath}/video.${outputFormat}`}`
+${outputName ? `${outputPath}/${outputJoined}` : `${outputPath}/video.${outputFormat}`}`
 
-    return ffmpeg_convert
+    var stringObj = {
+        command: `${ffmpeg_convert}`,
+        outputPath:`${outputJoined}`,
+    }
+
+    return stringObj;
 }
 
 
@@ -184,10 +190,10 @@ function sendresponse(code,res,still_to_send){
 }
 
 //function to remove processed files from local filesystem
-function unlinkFiles(name,format,filename,ans) {
+function unlinkFiles(outputName,filename,ans) {
         console.log("Unlink has begun!");
         try{
-            fs.unlinkSync(`${__dirname}/output/${name}.${format}`);
+            fs.unlinkSync(`${__dirname}/output/${outputName}`);
             fs.unlinkSync(`${__dirname}/input/${filename}`);
             return true
         }catch(exception){
