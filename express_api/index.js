@@ -7,9 +7,8 @@ const path_mod = require('path');
 
 const { exec } = require('child_process');
 
-
 const s3Controller = require('./src/s3-controller');
-const Convert = require('./src/convert');
+
 
 //express offeres middleware for handling of json
 const app = express();
