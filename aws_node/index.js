@@ -5,6 +5,7 @@ const ejs = require('ejs');
 const path = require('path'); 
 const { performance } = require('perf_hooks');
 const fs = require('fs');
+const {execSync} = require('child_process');
 
 const app = express();
 const s3Controller = require('./src/s3-controller');
@@ -61,7 +62,12 @@ app.post('/parameters', function(req,res){
     console.log('---- TIME:' + stamp() );
 
     //var prove = sendRequest();
-    call(req,res);
+
+    for (var i=0;i<3;i++){
+      req.body.outputName=req.body.outputName.concat(`${i}`)
+      call(req,res,i);
+      execSync('sleep 1');
+    }
    
    
 });
@@ -101,7 +107,7 @@ console.log("Site "+req.originalUrl+" has been requested")
 next()
 }
 
-async function call(param1,param2) {
+async function call(param1,param2,counter) {
 
   const body = param1.body
 
@@ -141,25 +147,32 @@ async function call(param1,param2) {
       
       console.log("Response: %j", prove.body);
       if (prove.body.status === "ok") {
-        param2.sendFile(__dirname + '/public/sucess.html');
-
-        var endTime = performance.now()
+        if (counter == 2 ) {param2.sendFile(__dirname + '/public/sucess.html');}
+        logging(counter);
+        
       }
       else {
-        param2.render('error.ejs', { error: prove.body.error_message });
-
-        var endTime = performance.now()
+        if (counter == 2 ) {param2.render('error.ejs', { error: prove.body.error_message });}
+        logging(counter);
       }
 
-      execTime= `\n Current Time: ${stamp()} Execution time: ${endTime-startTime}; Status:${prove.body.error_message ? prove.body.error_message : prove.body.status}`
       
-      fs.appendFile("./logging/execution.txt",execTime, function(err) {
-        if(err) {
-            return console.log(err);
+      
+      function logging(counter){
+        if (counter == 2 ) {
+          var endTime = performance.now();
+          execTime= `\n Current Time: ${stamp()} Execution time: ${endTime-startTime}; Status:${prove.body.error_message ? prove.body.error_message : prove.body.status}`;
+          fs.appendFile("./logging/execution.txt",execTime, function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        
+            console.log("The file was saved!");
+          }); 
         }
-    
-        console.log("The file was saved!");
-      }); 
+      }
+
+
 
 
     
