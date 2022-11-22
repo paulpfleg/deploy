@@ -162,6 +162,7 @@ async function call(param1,param2,counter) {
         if (counter == 2 ) {
           var endTime = performance.now();
           execTime= `\n Current Time: ${stamp()} Execution time: ${endTime-startTime}; Status:${prove.body.error_message ? prove.body.error_message : prove.body.status}`;
+          console.log(execTime);
           fs.appendFile("./logging/execution.txt",execTime, function(err) {
             if(err) {
                 return console.log(err);
