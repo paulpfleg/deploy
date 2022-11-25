@@ -161,7 +161,7 @@ function checkString(String){
     //array permittet chars
 
    // &  ; $  < ` \ !
-    const checkfor = [";","$","#","&","\\","|",">","<","!","`"];
+    const checkfor = [";","$","#","&","\\","|",">","<","!","`",];
 
     for (var i = 0; i < checkfor.length; i++){
         if (String.includes(checkfor[i])){
