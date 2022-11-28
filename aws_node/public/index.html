@@ -80,11 +80,11 @@
                                             <div class="col mb-3">
                                                 <label for="codec" class="control-label">Video Codec:</label>
                                                 <select class="form-control" placeholder="default: h264" name="codec" id="codec" required onChange="visibility(`codec`,`profile`,objectProfile)">
-                                                    <option id="h264">h264</option>
-                                                    <option id="hevc">hevc</option>
-                                                    <option id="vp9">vp9</option>
-                                                    <option id="prores">prores</option>
-                                                    <option id="dnxhd">dnxhd</option>
+                                                    <option value="h264">H264</option>
+                                                    <option value="hevc">HEVC</option>
+                                                    <option value="vp9">VP9</option>
+                                                    <option value="prores">ProRes</option>
+                                                    <option value="dnxhd">DNxHD</option>
                                                 </select>
                                             </div>
 
@@ -155,9 +155,9 @@
 
                                                         <label for="tonemap" class="control-label">Tonemap algorith.:</label>
                                                         <select class="form-control" placeholder="default:" name="tonemap" id="tonemap">
-                                                            <div><option id="clip">clip</option></div>
-                                                            <option id="linear">linear</option>
-                                                            <option id="gamma">gamma</option>
+                                                            <option value="clip">clip</option>
+                                                            <option value="linear">linear</option>
+                                                            <option value="gamma">gamma</option>
                                                             <option value="reinhard">reinhard</option>
                                                             <option value="hable">hable</option>
                                                             <option value="mobius">mobius</option>
