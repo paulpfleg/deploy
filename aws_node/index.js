@@ -62,14 +62,9 @@ app.post('/parameters', function(req,res){
     console.log('---- TIME:' + stamp() );
 
     //var prove = sendRequest();
-
-    for (var i=0;i<3;i++){
       req.body.outputName=req.body.outputName.concat(`${i}`)
       call(req,res,i);
       execSync('sleep 1');
-    }
-   
-   
 });
 
   //starts the node Server
@@ -107,7 +102,7 @@ console.log("Site "+req.originalUrl+" has been requested")
 next()
 }
 
-async function call(param1,param2,counter) {
+async function call(param1,param2) {
 
   const body = param1.body
 
@@ -147,19 +142,18 @@ async function call(param1,param2,counter) {
       
       console.log("Response: %j", prove.body);
       if (prove.body.status === "ok") {
-        if (counter == 2 ) {param2.sendFile(__dirname + '/public/sucess.html');}
-        logging(counter);
+        param2.sendFile(__dirname + '/public/sucess.html');
+        logging();
         
       }
       else {
-        if (counter == 2 ) {param2.render('error.ejs', { error: prove.body.error_message });}
-        logging(counter);
+        param2.render('error.ejs', { error: prove.body.error_message });
+        logging();
       }
 
       
       
-      function logging(counter){
-        if (counter == 2 ) {
+      function logging(){
           var endTime = performance.now();
           execTime= `\n Current Time: ${stamp()} Execution time: ${endTime-startTime}; Status:${prove.body.error_message ? prove.body.error_message : prove.body.status}`;
           console.log(execTime);
@@ -170,7 +164,6 @@ async function call(param1,param2,counter) {
         
             console.log("The file was saved!");
           }); 
-        }
       }
 
 
