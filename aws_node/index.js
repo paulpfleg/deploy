@@ -62,8 +62,7 @@ app.post('/parameters', function(req,res){
     console.log('---- TIME:' + stamp() );
 
     //var prove = sendRequest();
-      req.body.outputName=req.body.outputName.concat(`${i}`)
-      call(req,res,i);
+      call(req,res);
       execSync('sleep 1');
 });
 
