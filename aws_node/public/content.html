@@ -1,3 +1,4 @@
+
 <html>
 
     <head>
@@ -46,7 +47,7 @@
                               
                         <form class="" id="convertForm" action="/parameters" method="post">
 
-                                <div class="mb-3">
+                                <div class="mb-3 p-5">
 
 
                                     
@@ -229,8 +230,10 @@
                                                     </div>
 
                                             <hr>
-                                                                       
-                                                <div class="mx-auto" id="bucket-data-list">                                            
+
+                                            <div class="card-columns  mb-3">                                  
+                                                <div id="bucket-data-list"></div>                                
+                                            </div>
                                     </div>
                                                                
                                     <input id= "hidden_url" type="hidden" name="url">
@@ -355,8 +358,7 @@
                       }
 
                       
-                      return `
-                            <div class="card mb-3" onclick="sendForm(${index})" data-bs-toggle="tooltip" data-placement="left" data-html="true" title=${item.key}>
+                      return `<div class="card" onclick="sendForm(${index})" data-bs-toggle="tooltip" data-placement="left" data-html="true" title=${item.key}>
                             <div style="background:#2a6bb7; color: white !important" class="card-header">
                                             <b class="card-title">${shortkey}</b> 
                                         </div>
@@ -365,9 +367,8 @@
                                             <br>
                                             Modified: ${item.lastModified}
                                         </div>
-                            </div>
-                            
-                            </div>`
+                        </div>
+                        <br>`
                     });
                     document.getElementById('bucket-data-list').innerHTML = objectList.join(" ");
                 });
