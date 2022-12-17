@@ -379,6 +379,9 @@
                     const url = getData(`/get-object-url/${fileName}`, (url) => {
                         document.getElementById("hidden_url").value = url;
                         document.getElementById("hidden_filename").value = fileName;
+                        document.getElementById("convertForm").submit(function(eventObj) {
+                            return true;
+                        });
                         document.getElementById('welcome').innerHTML = "Request send!";
                         window.scrollTo(0, 0);
                         document.getElementById('forUser').innerHTML = 
@@ -388,11 +391,7 @@
                             <span style="background:#2a6bb7; color: white !important"  class="sr-only">Loading...</span>
                             </div>
                             <button type="button" style="color: white !important" class="btn btn-outline-light btn-sm" onclick="location.href='/';">Next Request</button>
-                            `
-                        document.getElementById("convertForm").submit(function(eventObj) {
-                            return true;
-                        });
-                        
+                            `                        
                     });
 
                     console.log(url);
