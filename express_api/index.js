@@ -12,12 +12,13 @@ const s3Controller = require('./src/s3-controller');
 
 //express offeres middleware for handling of json
 const app = express();
+app.use(express.json());
 
+//constant server port
 const PORT = 8081;
 
 var converted = {};
 
-app.use(express.json())
 
 //enable bodyparser -> json to string
 app.use(bodyParser.urlencoded({
@@ -48,6 +49,7 @@ app.post('/convert/', (req,res) => {
     console.log(ffmpeg_convert);
 
 if (checkString(ffmpeg_convert.command)){
+    //download file from s3
     const file = fs.createWriteStream(`${__dirname}/input/${filename}`);
     const request = https.get(`${url}`, function(response) {
         response.pipe(file); //after download completed close filestream
@@ -61,6 +63,7 @@ if (checkString(ffmpeg_convert.command)){
                 }
 
                 try{
+                    //execute ffmpeg command in child process
                     exec(ffmpeg_convert.command, (error, stdout, stderr) => {
                         if (error) {
                             console.error(`error: ${error.message}`);
@@ -75,9 +78,10 @@ if (checkString(ffmpeg_convert.command)){
                         }
                         stdout ? console.log(`stdout: ${stdout}`) : {};
 
-                        //upload the file to S3 Bucket -
+                        //upload the file to S3 Bucket
                         s3Controller.s3Upload(`${__dirname}/output/${ffmpeg_convert.outputPath}`,`${ffmpeg_convert.outputPath}`,converted)
                         .then( (converted) => {
+                            //if no responce was send to frontend jet to so with sucess message
                             if (still_to_send){ 
                                 res.send({
                                     status : "ok",
@@ -159,7 +163,7 @@ ${outputName ? `${outputPath}/${outputJoined}` : `${outputPath}/video.${outputFo
 function checkString(String){
 
     //array of permittet chars
-    const checkfor = [";","$","#","&","\\","|",">","<","!","`"];
+    const checkfor = [";","$","#","&","\\","|",">","<","!","`","(",")"];
 
     for (var i = 0; i < checkfor.length; i++){
         if (String.includes(checkfor[i])){

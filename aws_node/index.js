@@ -61,15 +61,15 @@ app.post('/parameters', function(req,res){
     console.log("--- Incomming request --- %j",req.body);
     console.log('---- TIME:' + stamp() );
 
-    //var prove = sendRequest();
+  //var prove = sendRequest();
       call(req,res);
       execSync('sleep 1');
 });
 
-  //starts the node Server
-  app.listen(PORT, () => {
-    console.log(`its alive on http://localhost:${PORT}`);
-  });
+//starts the node Server
+app.listen(PORT, () => {
+  console.log(`its alive on http://localhost:${PORT}`);
+});
 
 
 function sendRequest(options) {
@@ -87,16 +87,13 @@ function sendRequest(options) {
       else{
       console.log(`Status: ${res.statusCode}`);
       resolve(res);
-      }
-      
-      
-            
+      }         
     })
   });
 }
 
 // Logger function mainly to showcase middleware
-function logger (req,res,next) {
+function logger (req,res,next){
 console.log("Site "+req.originalUrl+" has been requested")
 next()
 }
@@ -131,46 +128,39 @@ async function call(param1,param2) {
 
   var execTime = "";
 
-    console.log("--- Out Going Request --- %j" , options.body);
-    console.log("to %j  ---- TIME " + stamp(),  options.url);
+  console.log("--- Out Going Request --- %j" , options.body);
+  console.log("to %j  ---- TIME " + stamp(),  options.url);
 
-    //get time, when request is send
-    var startTime = performance.now();
+  //get time, when request is send
+  var startTime = performance.now();
 
-    var prove = await sendRequest(options);
+  var prove = await sendRequest(options);
       
-      console.log("Response: %j", prove.body);
-      if (prove.body.status === "ok") {
-        param2.sendFile(__dirname + '/public/sucess.html');
-        logging();
-        
-      }
-      else {
-        param2.render('error.ejs', { error: prove.body.error_message });
-        logging();
-      }
+  console.log("Response: %j", prove.body);
+  if (prove.body.status === "ok") {
+    param2.sendFile(__dirname + '/public/sucess.html');
+    logging();}
+  else {
+    param2.render('error.ejs', { error: prove.body.error_message });
+    logging();
+  }
 
-      
-      
-      function logging(){
-          var endTime = performance.now();
-          execTime= `\n Current Time: ${stamp()} Execution time: ${endTime-startTime}; Status:${prove.body.error_message ? prove.body.error_message : prove.body.status}`;
-          console.log(execTime);
-          fs.appendFile("./logging/execution.txt",execTime, function(err) {
-            if(err) {
-                return console.log(err);
-            }
-        
-            console.log("The file was saved!");
-          }); 
-      }
-
-
-
-
-    
 }
 
+function logging(){
+  var endTime = performance.now();
+  execTime= `\n Current Time: ${stamp()} Execution time: ${endTime-startTime}; Status:${prove.body.error_message ? prove.body.error_message : prove.body.status}`;
+  console.log(execTime);
+  fs.appendFile("./logging/execution.txt",execTime, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+  }); 
+}
+
+//function to return a timestamp of the moment, the function was called
 function stamp(){
   const dateObject = new Date();
   // current date
