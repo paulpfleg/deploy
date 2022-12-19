@@ -8,7 +8,7 @@
         <title>Convert Media S3</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+        <link rel="stylesheet" type="text/css" href="/CSS/main.css">
     </head>
 
 
@@ -42,10 +42,13 @@
                 </div>
             </div>
 
+        
             <div class="col-sm-4 mx-auto mb-3">
                 <h2>Upload Files</h2>
                 <input  type="file" id="s3-file" onchange="saveFile(this)"/>
             </div>
+
+        <form action="GET">
 
             <div class="row">
 
@@ -67,7 +70,7 @@
 
                         <div id="bucket-data-list-delete">
                     </div>
-
+        </form>
                     <form id="deleteForm" action="/delete-from-s3" method="post">
                         <input id= "hidden_filename" type="hidden" name="filename">
                     </form>
