@@ -98,9 +98,9 @@ console.log("Site "+req.originalUrl+" has been requested")
 next()
 }
 
-async function call(param1,param2) {
+async function call(req,res) {
 
-  const body = param1.body
+  const body = req.body
 
   // maps req. parameters to new json object, to send it to the backend
   var options = {
@@ -134,23 +134,28 @@ async function call(param1,param2) {
   //get time, when request is send
   var startTime = performance.now();
 
+  // wait for response from Backend
   var prove = await sendRequest(options);
       
   console.log("Response: %j", prove.body);
   if (prove.body.status === "ok") {
-    param2.sendFile(__dirname + '/public/sucess.html');
+    res.sendFile(__dirname + '/public/sucess.html');
     logging();}
   else {
-    param2.render('error.ejs', { error: prove.body.error_message });
-    logging();
+    res.render('error.ejs', { error: prove.body.error_message });
+    logging(startTime);
   }
 
 }
 
-function logging(){
+//log the time taken, for the requests
+function logging(startTime){
+  //get the current time (in ms timestamp)
   var endTime = performance.now();
+  // calculate time difference between start and end of the request
   execTime= `\n Current Time: ${stamp()} Execution time: ${endTime-startTime}; Status:${prove.body.error_message ? prove.body.error_message : prove.body.status}`;
   console.log(execTime);
+  // write to log file
   fs.appendFile("./logging/execution.txt",execTime, function(err) {
     if(err) {
         return console.log(err);

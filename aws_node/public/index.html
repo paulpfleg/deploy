@@ -248,6 +248,7 @@
 
         <script>
             let list = [];
+            // List of allowed  container codec combinations
             const objectCodec = {
                     mp4 : { 
                             h264: "h264",
@@ -269,6 +270,7 @@
                     
                     };
 
+            // List of possible codec - profile combinations
             const objectProfile = {
                     h264    : {
                         "":"", 
@@ -315,23 +317,7 @@
                     
                     };
 
-            function saveFile(event) {
-                const xhr = new XMLHttpRequest();
-                const formData = new FormData();
-                const file = event.files[0];
-                formData.append('s3-file', file);
-
-                xhr.onreadystatechange = (state) => {
-                    if(xhr.readyState === XMLHttpRequest.DONE) {
-                    }
-                }
-
-                xhr.timeout = 5000;
-                xhr.open('POST', '/upload-to-s3');
-                xhr.send(formData);
-            }
-
-            //cuntion to run when page is loaded
+            //funtion to run when page is loaded
             function loadData() {
                 getBucketObjectList();
                 visibility(`codec`,`profile`,objectProfile);
@@ -345,8 +331,6 @@
                     list = data;
                     
                     const objectList = data.map((item, index) => {
-                      // const charEdit=(item.lastModified.charAt(21)+1) //prepared for changing the time zone
-                      // item.lastModified.charAt(21)=charEdit
                       item.lastModified=item.lastModified.slice(0,-8).replace(/-/g, ".").replace(/T/g, " ");
                       var len = item.key.length
                       var shortkey=item.key
@@ -373,6 +357,8 @@
                 });
             }
 
+
+            // add hidden Form Elements and send the form
             async function sendForm(index) {
                 if(formValidation()){
                     const fileName = (list[index] || {}).key;
@@ -477,6 +463,7 @@
                 
             }
 
+            //hides the basic colour space options, when advanced Options are used 
             function hideColourspace(){
                 document.getElementById("getHidden").innerHTML=``
             }
