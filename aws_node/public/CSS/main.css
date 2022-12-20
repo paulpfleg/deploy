@@ -53,3 +53,8 @@ body {
     margin-bottom: 16px;
     resize: vertical;
     }
+
+    button{
+        background:#2a6bb7;
+        color: white;
+    }

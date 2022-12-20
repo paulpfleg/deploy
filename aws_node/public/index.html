@@ -204,7 +204,7 @@
                                                 <div class="col mb-3">
                                                     <div class="colourspace collapse">
                                                         <label for="transfer" class="control-label">Transfer charakteristiks:</label>
-                                                        <select class="form-control" placeholder="default:" name="transfer" id="transfer">
+                                                        <select class="form-control" placeholder="default:" name="transfer" id="transfer" width="12">
                                                             <option id="input">input</option>
                                                             <option id="601">601</option>
                                                             <option id="709">709</option>
@@ -217,22 +217,21 @@
 
                                                     </div>
                                                 </div>
+                                                <div class="col mb-3 colourspace collapse">
+                                                    <label class="mx-auto" for="advanced_colour"> Use advanced colour settings</label>
+                                                    <input style="text-align:center; vertical-align:middle" type="checkbox" id="advanced_colour" name="advanced_colour" value="advanced_colour">
+                                                </div>
                                             </div>
 
 
-                                                    <div  class="colourspace collapse">
-                                                        <input type="checkbox" id="advanced_colour" name="advanced_colour" value="advanced_colour" >
-                                                        <label for="advanced_colour"> Use advanced colour settings</label>
-                                                    </div>
-
                                                     <div class="form-row collapse collapse_advanced mb-3">
-                                                        <button style="background:#2a6bb7; color: white !important" class="btn btn-secondary mx-auto btn-sm" type="button" data-toggle="collapse" data-target=".colourspace" aria-expanded="false" aria-controls="colourspace" onclick=hideColourspace()>
+                                                        <button class="btn btn-secondary mx-auto btn-sm" type="button" data-toggle="collapse" data-target=".colourspace" aria-expanded="false" aria-controls="colourspace" onclick=hideColourspace()>
                                                             expert colours
                                                         </button>
                                                     </div>
 
                                                     <div class="form-row ">
-                                                        <button style="background:#2a6bb7; color: white !important" class="btn btn-secondary mx-auto" type="button" data-toggle="collapse" data-target=".collapse_advanced" aria-expanded="false" aria-controls="collapseExample">
+                                                        <button class="btn btn-secondary mx-auto" type="button" data-toggle="collapse" data-target=".collapse_advanced" aria-expanded="false" aria-controls="collapseExample">
                                                             advanced options
                                                         </button>
                                                     </div>
