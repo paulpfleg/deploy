@@ -5,7 +5,7 @@
 
     <head>
 
-        <title>Convert Media S3</title>
+        <title>Media Cloud Encoder</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="/CSS/main.css">
@@ -31,55 +31,49 @@
           
 
         <div class="container" >
-            <div style="background:#2a6bb7; color: white !important" class="jumbotron mt-4">
-                <div class="mx-auto" style="width: 20rem;">
-                    <div>
-                        <h1>Manage Files</h1>
-                    </div>
-                    <div>
-                        <p>Upload and download files you want to convert at the convert page.</p>
-                    </div>
-                </div>
-            </div>
-
-        
-            <div class="col-sm-4 mx-auto mb-3">
-                <h2>Upload Files</h2>
-                <input  type="file" id="s3-file" onchange="saveFile(this)"/>
-            </div>
-
-        <form action="GET">
-
-            <div class="row">
-
-                <div class="col-sm-12">
-                    <h2>Download Files</h2>
-                    <div class= "card-columns mb-3" id="container">
-
-                        <div id="bucket-data-list">
-                    </div>
-
+            
+                <div class="jumbotron mt-4">
+                    <div class="mx-auto" style="width: 20rem;">
+                        <div>
+                            <h1>Manage Files</h1>
+                        </div>
+                        <div>
+                            <p>Upload and download files you want to convert at the convert page.</p>
+                        </div>
                     </div>
                 </div>
-
+            
+            <div class="p-4">
+            
+                <div class="col-sm-6 mx-auto mb-3">
+                    <h2>Upload Files</h2>
+                    <input  type="file" id="s3-file" onchange="saveFile(this)"/>
+                </div>
+            
                 
 
-                <div class="col-sm-12">
-                    <h2>Delete Files</h2>
-                    <div class= "card-columns mb-3" id="container">
+                <form id="deleteForm" class="px-4 py-3" action="/delete-from-s3" method="post">
 
-                        <div id="bucket-data-list-delete">
+                    <div class="mb-3">
+
+                            <h2>Download Files</h2>
+
+                                <div id="bucket-data-list" class="mx-auto">
+                                </div>
+                    
+                            <hr>
+
+                            <h2>Delete Files</h2>
+
+                                <div id="bucket-data-list-delete" class="mx-auto"></div>
+                                </div>
+                            <input id= "hidden_filename" type="hidden" name="filename">
                     </div>
-        </form>
-                    <form id="deleteForm" action="/delete-from-s3" method="post">
-                        <input id= "hidden_filename" type="hidden" name="filename">
-                    </form>
-
-
-                </div>
-
+                </form>
             </div>
-            
+        </div>
+        
+            <script type="text/javascript" src="/functions/utilities.js"></script>
 
             <script>
                 let list = [];
@@ -111,21 +105,19 @@
                         data = JSON.parse(data);
                         list = data;
                         const objectList = data.map((item, index) => {
+                            item=shorten(item);
                             return `
-                            <div class="mb-3 card " onclick="downloadFile(${index})">
-                                        <div style="background:#2a6bb7; color: white !important" class="card-header">
-                                            <b class="card-title">${item.key}</b> 
+                            <div class="card mb-3" onclick="downloadFile(${index})" data-bs-toggle="tooltip" data-placement="left" data-html="true" title=${item.key}>
+                                <div class="card-header">
+                                            <b class="card-title">${item.shortkey}</b> 
                                         </div>
                                         <div class="card-body">
-                                            File Size: ${item.size} 
+                                            Size: ${item.size} 
                                             <br>
-                                            File Modified: ${item.lastModified.slice(0,-8).replace(/-/g, ".").replace(/T/g, " ")}
+                                            Modified: ${item.lastModified}
                                         </div>
-                            </div>
-                            <br>                                        
+                            </div>                                     
                             `
-
-
                         });
                         document.getElementById('bucket-data-list').innerHTML = objectList.join(" ");
                     });
@@ -136,18 +128,18 @@
                         data = JSON.parse(data);
                         list = data;
                         const objectList = data.map((item, index) => {
+                            item=shorten(item);
                             return `
-                            <div class="mb-3 card" onclick="deleteFile(${index})">
-                                        <div class="card-header" style="background:#2a6bb7; color: white !important">
-                                            <b class="card-title">${item.key}</b> 
+                            <div class="mb-3 card " onclick="downloadFile(${index})" data-bs-toggle="tooltip" data-placement="left" data-html="true" title=${item.key}>
+                                        <div class="card-header">
+                                            <b class="card-title">${item.shortkey}</b> 
                                         </div>
                                         <div class="card-body">
-                                            File Size: ${item.size} 
+                                            Size: ${item.size} 
                                             <br>
-                                            File Modified: ${item.lastModified.slice(0,-8).replace(/-/g, ".").replace(/T/g, " ")}
+                                            Modified: ${item.lastModified}
                                         </div>
-                            </div>
-                            <br>                                        
+                            </div>                                       
                             `
 
 

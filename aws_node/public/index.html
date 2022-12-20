@@ -1,7 +1,7 @@
 <html>
 
     <head>
-        <title>Convert Media S3</title>
+        <title>Media Cloud Encoder</title>
         <!-- not jet working -->
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
 
@@ -35,7 +35,7 @@
 
         <div class="container">
 
-            <div style="background:#2a6bb7; color: white !important" class="jumbotron mt-4">
+            <div class="jumbotron mt-4">
                 <div class="mx-auto" style="width: 20rem;">
                     <div>
                         <h1 id="welcome" class="text-center">Convert Files</h1>
@@ -253,7 +253,7 @@
 
     
 
-        
+        <script type="text/javascript" src="/functions/utilities.js"></script>
 
         <script>
             let list = [];
@@ -340,18 +340,14 @@
                     list = data;
                     
                     const objectList = data.map((item, index) => {
-                      item.lastModified=item.lastModified.slice(0,-8).replace(/-/g, ".").replace(/T/g, " ");
-                      var len = item.key.length
-                      var shortkey=item.key
-                      if (len>19) {
-                        shortkey="..."+item.key.slice(-19)
-                      }
+                        item=shorten(item)
+
 
                       
                       return `
                             <div class="card mb-3" onclick="sendForm(${index})" data-bs-toggle="tooltip" data-placement="left" data-html="true" title=${item.key}>
-                            <div style="background:#2a6bb7; color: white !important" class="card-header">
-                                            <b class="card-title">${shortkey}</b> 
+                            <div class="card-header">
+                                            <b class="card-title">${item.shortkey}</b> 
                                         </div>
                                         <div class="card-body" >
                                             Size: ${item.size} 
