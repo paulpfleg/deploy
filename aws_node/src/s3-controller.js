@@ -5,6 +5,11 @@ const {deleteFilefromS3, uploadFileToS3, getBucketListFromS3, getPresignedURL} =
 const path_mod = require('path');
 
 
+// -- the file provides functions to adjust in- / out-puts of aws sdk and handel common errors
+
+
+// async call to upload function in s3-service file
+// gets the form data containing the file from 
 async function s3Upload (req, res) {
     const formData = await readFormData(req);
     try{
@@ -15,37 +20,7 @@ async function s3Upload (req, res) {
     }
 }
 
-async function s3Delete (req, res) {
-    
-    try{
-        console.log(req.body);
-        const {filename} = req.body;
-
-        console.log(filename)
-        await deleteFilefromS3(filename, 'ffmpeg-node');
-        
-        res.sendFile(path_mod.join(__dirname, '..', '/public/files.html'));
-    } catch(ex) {
-        res.send('ERROR!!!!');
-    }
-}
-
-async function s3Get (req, res) {
-    try{
-        const bucketData = await getBucketListFromS3('ffmpeg-node');
-        const {Contents = []} = bucketData; 
-        res.send(Contents.map(content => {
-        return {
-            key: content.Key,
-            size: (content.Size/1024).toFixed(1) + ' KB',
-            lastModified: content.LastModified
-        }
-    }));
-    } catch(ex) {
-        res.send([]);
-    }
-}
-
+// handles form data containing incomming file
 async function readFormData(req) {
     return new Promise(resolve => {
         const dataObj = {};
@@ -61,6 +36,40 @@ async function readFormData(req) {
             resolve(dataObj);
         });
     });
+}
+
+
+//async call for file deletation incl. some logging
+async function s3Delete (req, res) {
+    
+    try{
+        console.log(req.body);
+        const {filename} = req.body;
+
+        console.log(filename)
+        await deleteFilefromS3(filename, 'ffmpeg-node');
+        
+        res.sendFile(path_mod.join(__dirname, '..', '/public/files.html'));
+    } catch(ex) {
+        res.send('ERROR!!!!');
+    }
+}
+
+//same as aboth returns a list objects containing the infos below
+async function s3Get (req, res) {
+    try{
+        const bucketData = await getBucketListFromS3('ffmpeg-node');
+        const {Contents = []} = bucketData; 
+        res.send(Contents.map(content => {
+        return {
+            key: content.Key,
+            size: (content.Size/1024).toFixed(1) + ' KB',
+            lastModified: content.LastModified
+        }
+    }));
+    } catch(ex) {
+        res.send([]);
+    }
 }
 
 async function getSignedUrl(req, res) {
