@@ -337,25 +337,47 @@
                 getData('/all-files', (data = []) => {
                     data = JSON.parse(data);
                     list = data;
-                    
+
+
+
+
                     const objectList = data.map((item, index) => {
                         item=shorten(item)
 
-
-                      
-                      return `
-                            <div class="card mb-3" onclick="sendForm(${index})" data-bs-toggle="tooltip" data-placement="left" data-html="true" title=${item.key}>
-                            <div class="card-header">
-                                            <b class="card-title">${item.shortkey}</b> 
+                        if (item.key==="Error"){  
+                            return `
+                            <div class="card mb-3" title="S3 Error">
+                            <div class="card-header allert">
+                                            <b class="card-title">S3 Error</b> 
                                         </div>
                                         <div class="card-body" >
-                                            Size: ${item.size} 
+                                            when loading S3 content 
                                             <br>
-                                            Modified: ${item.lastModified}
+                                            <br>
+                                            check your credentials
                                         </div>
                             </div>
                             
                             </div>`
+                        
+                        
+                        }
+                        else {
+                      
+                            return `
+                                    <div class="card mb-3" onclick="sendForm(${index})" data-bs-toggle="tooltip" data-placement="left" data-html="true" title=${item.key}>
+                                    <div class="card-header">
+                                                    <b class="card-title">${item.shortkey}</b> 
+                                                </div>
+                                                <div class="card-body" >
+                                                    Size: ${item.size} 
+                                                    <br>
+                                                    Modified: ${item.lastModified}
+                                                </div>
+                                    </div>
+                                    
+                                    </div>`
+                        }
                     });
                     document.getElementById('bucket-data-list').innerHTML = objectList.join(" ");
                 });

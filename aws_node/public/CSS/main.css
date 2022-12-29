@@ -12,6 +12,11 @@
     color: white;
 }
 
+.card-header{
+    background:#b72a2a;
+    color: white;
+}
+
 .jumbotron{
     background:#2a6bb7;
     color: white;

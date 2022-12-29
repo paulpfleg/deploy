@@ -57,18 +57,27 @@ async function s3Delete (req, res) {
 
 //same as aboth returns a list objects containing the infos below
 async function s3Get (req, res) {
-    try{
-        const bucketData = await getBucketListFromS3('ffmpeg-node');
-        const {Contents = []} = bucketData; 
+
+    function sendRes(Contents) {        
+            
         res.send(Contents.map(content => {
         return {
-            key: content.Key,
+            key: content.Key ,
             size: (content.Size/1024).toFixed(1) + ' KB',
             lastModified: content.LastModified
-        }
-    }));
+        }}
+        ))
+    }
+
+    try{
+        const bucketData = await getBucketListFromS3('ffmpeg-node');
+        var {Contents = []} = bucketData; 
+
+        return sendRes(Contents);
+
     } catch(ex) {
-        res.send([]);
+        Contents = [{Key: 'Error', LastModified: 'S3 not Reachable', Size: 0}]
+        sendRes(Contents)
     }
 }
 
