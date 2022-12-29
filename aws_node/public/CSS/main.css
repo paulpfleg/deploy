@@ -24,7 +24,7 @@
 
 .tick::before {
     content: '\2713';
-    font-size: large; 
+    font-size: xx-large; 
     color: green;
     animation: fadeOut 3s;
     animation-delay: 2s;
@@ -59,6 +59,7 @@
 
 .text-board{
     max-width: 600px;
+    text-align: center;
     margin: 10px auto;
     background-color: #f2f2f2;
     border: 1px solid #ccc;
@@ -98,3 +99,25 @@ body {
         background:#2a6bb7;
         color: white;
     }
+
+
+
+
+/* Hide the default input element */
+#fs3-file {
+  display: none;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background:#2a6bb7;
+    color: white;
+    border-radius: 5px;
+}

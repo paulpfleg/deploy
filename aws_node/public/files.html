@@ -43,19 +43,33 @@
                     </div>
                 </div>
             
+            
             <div class="p-4">
-            
-                <div class="col-sm-6 mx-auto mb-3">
-                    
-                    <h2>Upload Files</h2>
-                    <div class="form-row"></div>
-                        <div id="waiter"></div>
-                        <input  type="file" id="s3-file" onchange="saveFile(this)"/>
+
+                <div class="row">
+
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-8 text-board">
                         
+                        <h2>Upload Files</h2>
+                        
+                        <div class="row"></div>
+
+                            <div id="waiter" class="col-sm-7"></div>
+
+                            <label class="col-sm-4 custom-file-upload">
+                                <input  type="file" id="s3-file" onchange="saveFile(this)"/>
+                                Upload File
+                            </label>
+
+                            <div class="col-sm-1"></div>
+
+                        </div>
+
                     </div>
-                </div>
+                    <div class="col-sm-1"></div>
             
-                
+                </div>
 
                 <form id="deleteForm" class="px-4 py-3" action="/delete-from-s3" method="post">
 
@@ -190,7 +204,6 @@
                     return true;
                 });
                 } else return false;
-                await redirectToPage("/files");
                 }
 
 
