@@ -12,7 +12,7 @@
     color: white;
 }
 
-.card-header{
+.alert{
     background:#b72a2a;
     color: white;
 }
@@ -21,6 +21,41 @@
     background:#2a6bb7;
     color: white;
 }
+
+.tick::before {
+    content: '\2713';
+    font-size: large; 
+    color: green;
+    animation: fadeOut 3s;
+    animation-delay: 2s;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+.x::before {
+    content: '\2717';
+    color: red;
+    animation: fadeOut 3s;
+    animation-delay: 2s;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+  
 
 .text-board{
     max-width: 600px;

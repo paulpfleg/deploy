@@ -14,9 +14,9 @@ async function s3Upload (req, res) {
     const formData = await readFormData(req);
     try{
         await uploadFileToS3(formData.file, 'ffmpeg-node');
-        res.send('Uploaded!!');
+        res.sendStatus(200);
     } catch(ex) {
-        res.send('ERROR!!!!');
+        res.sendStatus(500);;
     }
 }
 

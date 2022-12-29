@@ -46,8 +46,13 @@
             <div class="p-4">
             
                 <div class="col-sm-6 mx-auto mb-3">
+                    
                     <h2>Upload Files</h2>
-                    <input  type="file" id="s3-file" onchange="saveFile(this)"/>
+                    <div class="form-row"></div>
+                        <div id="waiter"></div>
+                        <input  type="file" id="s3-file" onchange="saveFile(this)"/>
+                        
+                    </div>
                 </div>
             
                 
@@ -85,14 +90,28 @@
                     const file = event.files[0];
                     formData.append('s3-file', file);
 
-                    xhr.onreadystatechange = (state) => {
-                        if(xhr.readyState === XMLHttpRequest.DONE) {
+                    xhr.onload = async function() {
+                        if (xhr.status === 200) {
+                            document.getElementById('waiter').innerHTML = `<div class="tick"></div>`
+                            await redirectToPage('/files');
+                            
+                        } else {
+                            document.getElementById('waiter').innerHTML = `<div class="x"></div>`
                         }
+                    };
+
+                    xhr.onreadystatechange = state => {
                     }
 
-                    xhr.timeout = 5000;
+                    xhr.timeout = 10000;
                     xhr.open('POST', '/upload-to-s3');
-                    xhr.send(formData);
+                    xhr.send(formData)
+                    document.getElementById('waiter').innerHTML = `
+                    
+                        <div class="spinner-border m-3 d-flex justify-content-center" style="width: 3rem; height: 3rem;" role="status">
+                        <span style="background:#2a6bb7; color: white !important"  class="sr-only">Loading...</span>
+                        </div>
+                    `;
                 }
 
                 function loadData() {
@@ -101,7 +120,7 @@
                 }
 
                 function getBucketObjectList() {
-                    getData('/all-files', (data = []) => {
+                    getData('/all-files', "GET" , (data = []) => {
                         data = JSON.parse(data);
                         list = data;
                         const objectList = data.map((item, index) => {
@@ -124,13 +143,13 @@
                 }
 
                 function getBucketObjectListDelete() {
-                    getData('/all-files', (data = []) => {
+                    getData('/all-files', "GET" , (data = []) => {
                         data = JSON.parse(data);
                         list = data;
                         const objectList = data.map((item, index) => {
                             item=shorten(item);
                             return `
-                            <div class="mb-3 card " onclick="downloadFile(${index})" data-bs-toggle="tooltip" data-placement="left" data-html="true" title=${item.key}>
+                            <div class="mb-3 card " onclick="predelete(${index})" data-bs-toggle="tooltip" data-placement="left" data-html="true" title=${item.key}>
                                         <div class="card-header">
                                             <b class="card-title">${item.shortkey}</b> 
                                         </div>
@@ -148,9 +167,15 @@
                     });
                 }
 
+                function predelete(index) {
+                    deleteFile(index,()=>{
+                        
+                    })
+                }
+
                 function downloadFile(index) {
                 const fileName = (list[index] || {}).key;
-                getData(`/get-object-url/${fileName}`, (url) => {
+                getData(`/get-object-url/${fileName}`, "GET" , (url) => {
                     window.open(url, '_blank');
                     console.log(url);
                 });
@@ -165,10 +190,11 @@
                     return true;
                 });
                 } else return false;
+                await redirectToPage("/files");
                 }
 
 
-                function getData(url, cb) {
+                function getData(url, type , cb) {
                     const xhr = new XMLHttpRequest();
                     xhr.onreadystatechange = state => {
                         if(xhr.readyState === XMLHttpRequest.DONE) {
@@ -176,8 +202,13 @@
                         }
                     }
                     xhr.timeout = 10000;
-                    xhr.open('GET', url);
+                    xhr.open(type , url);
                     xhr.send();
+                }
+
+                async function redirectToPage(url) {
+                    await new Promise(resolve => setTimeout(resolve, 4000));
+                    window.location.href = url;
                 }
             </script>
 
