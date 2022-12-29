@@ -95,8 +95,8 @@ body {
     resize: vertical;
     }
 
-    button{
-        background:#2a6bb7;
+button{
+        background:#2a6bb7 !important;
         color: white;
     }
 
