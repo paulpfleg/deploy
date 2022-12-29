@@ -133,6 +133,8 @@
                     getBucketObjectListDelete();
                 }
 
+                // same as in index.html -> rendering list of files in bucket 
+                    //once for download once for delete
                 function getBucketObjectList() {
                     getData('/all-files', "GET" , (data = []) => {
                         data = JSON.parse(data);
@@ -181,12 +183,14 @@
                     });
                 }
 
+                // function prepared for further callbacks
                 function predelete(index) {
                     deleteFile(index,()=>{
                         
                     })
                 }
 
+                // öffnet presigned download URL in neuem Fenster
                 function downloadFile(index) {
                 const fileName = (list[index] || {}).key;
                 getData(`/get-object-url/${fileName}`, "GET" , (url) => {
@@ -206,7 +210,7 @@
                 } else return false;
                 }
 
-
+                // same as in index.html in adition has type param, to enable also post requests
                 function getData(url, type , cb) {
                     const xhr = new XMLHttpRequest();
                     xhr.onreadystatechange = state => {
@@ -219,6 +223,7 @@
                     xhr.send();
                 }
 
+                // fuction to redirect to / reload page after a certain action waits certain amount of time
                 async function redirectToPage(url) {
                     await new Promise(resolve => setTimeout(resolve, 4000));
                     window.location.href = url;
