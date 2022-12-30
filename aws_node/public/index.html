@@ -51,12 +51,15 @@
 
             <div class="p-4">           
                               
-                        <form class="px-4 py-3" id="convertForm" action="/parameters" method="post">
+                        <form id="convertForm" action="/parameters" method="post">
 
-                                <div class="mb-3">
+                            <div class="form-row mb-3 ">
+                                <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".collapse_video" aria-expanded="false" aria-controls="collapseExample">
+                                    Video options
+                                </button>
+                            </div>
 
-
-                                    
+                                    <div class="collapse collapse_video">
                                         <div class="form-row">
                                             <div class="col mb-3">
                                                 <label for="bitrate" class="control-label">Bitrate:</label>
@@ -67,9 +70,7 @@
                                                 <input class=" form-control" type="text" name="outputName" id="outputName" placeholder="Output Name" required>
                                             </div>
                                         </div>
-                                    
-                                        
-                                        
+
                                         <div class="form-row">
                                             <div class="col mb-3">
                                                 <label for="outputFormat" class="control-label">Video Container:</label>
@@ -96,10 +97,24 @@
                                             </div>
 
                                         </div>
+                                    </div>
+                                
+                            
 
+                                <div class="mb-3">
+                               
+                                                               
                                         <hr>
+                                    
+                                        <div class="form-row mb-3 ">
+                                            <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".collapse_advanced" aria-expanded="false" aria-controls="collapseExample">
+                                                advanced options
+                                            </button>
+                                        </div>
+                                        
 
                                         <div class="form-row">
+                                            
                                             
                                                 <div class="col mb-3">
                                                     <div class="collapse collapse_advanced">
@@ -140,7 +155,13 @@
                                                 </div>
                                             </div>
 
-                                            <hr class="collapse colourspace">
+                                            <hr class="">
+
+                                            <div class="form-row mb-3">
+                                                <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".colourspace" aria-expanded="false" aria-controls="colourspace" onclick=hideColourspace()>
+                                                    colour options
+                                                </button>
+                                            </div>
 
                                             <div class="form-row">
                                                 <div class="col mb-3">
@@ -152,7 +173,7 @@
                                             
 
                                                 <div class="col mb-3">
-                                                    <div class="colourspace collapse" data-bs-toggle="tooltip" data-placement="right" data-html="true" title="What to do with out of Range Values? <br>
+                                                    <div class="colourspace collapse" data-bs-toggle="tooltip" data-placement="right" data-html="true" title="What to do with out of range Values? <br>
                                                     <b>clip:</b> <br>Hard Clip them<br>
                                                     <b>linear:</b> <br>linear map them<br>
                                                     <b>gamma:</b> <br>map by gamma curve<br>
@@ -217,24 +238,15 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col mb-3 colourspace collapse">
-                                                    <label class="mx-auto" for="advanced_colour"> Use advanced colour settings</label>
-                                                    <input style="text-align:center; vertical-align:middle" type="checkbox" id="advanced_colour" name="advanced_colour" value="advanced_colour">
+                                                <div class="col colourspace collapse" >
+                                                    <label class="mx-auto nowrap" for="advanced_colour" style="line-height: 6em;"> Use advanced colours: 
+                                                        <input style="text-align:center; vertical-align:middle" type="checkbox" id="advanced_colour" name="advanced_colour" value="advanced_colour">
+                                                    </label>
                                                 </div>
                                             </div>
 
 
-                                                    <div class="form-row collapse collapse_advanced mb-3">
-                                                        <button class="btn btn-secondary mx-auto btn-sm" type="button" data-toggle="collapse" data-target=".colourspace" aria-expanded="false" aria-controls="colourspace" onclick=hideColourspace()>
-                                                            expert colours
-                                                        </button>
-                                                    </div>
 
-                                                    <div class="form-row ">
-                                                        <button class="btn btn-secondary mx-auto" type="button" data-toggle="collapse" data-target=".collapse_advanced" aria-expanded="false" aria-controls="collapseExample">
-                                                            advanced options
-                                                        </button>
-                                                    </div>
 
                                             <hr>
                                                                        
