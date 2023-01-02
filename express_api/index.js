@@ -103,6 +103,9 @@ if (checkString(ffmpeg_convert.command)){
             });
         });
     }
+    else{
+        still_to_send=sendresponse(4,res,still_to_send);
+    }
 });
 
 function createFFmpegString(body,filename){
