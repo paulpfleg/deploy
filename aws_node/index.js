@@ -46,6 +46,10 @@ app.get('/about', (req, res) => {
     res.sendFile(__dirname + '/public/about.html')
 });
 
+app.get("/new", function(req, res) {
+  res.sendFile(__dirname + "/public/new.html");
+});
+
 // // --- Endpoits for Functions ---
 
 app.post('/upload-to-s3', s3Controller.s3Upload);
@@ -140,16 +144,16 @@ async function call(req,res) {
   console.log("Response: %j", prove.body);
   if (prove.body.status === "ok") {
     res.sendFile(__dirname + '/public/sucess.html');
-    logging();}
+    logging(startTime,prove);}
   else {
-    res.render('error.ejs', { error: prove.body.error_message });
-    logging(startTime);
+    res.render('error.ejs', { body: prove.body});
+    logging(startTime,prove);
   }
 
 }
 
 //log the time taken, for the requests
-function logging(startTime){
+function logging(startTime,prove){
   //get the current time (in ms timestamp)
   var endTime = performance.now();
   // calculate time difference between start and end of the request

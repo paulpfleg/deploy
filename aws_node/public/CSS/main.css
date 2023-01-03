@@ -1,50 +1,65 @@
 .card {
-    display: inline-block;
-   /*  border: 1px solid #444; */
-    border-radius: 5px;
-    background-color: #fff;
-    cursor: pointer;
-    
+  display: inline-block;
+ /*  border: 1px solid #444; */
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  min-width: 208px !important;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.418);
+  margin-right: 0.5%;
+  margin-left: 0.5%;
 }
 
 .card-header{
-    background:#2a6bb7;
-    color: white;
+  background:#2a6bb7;
+  color: white;
 }
 
+.card-body{
+  font-size: small;
+  line-height: 1.7;
+  padding: 1rem;
+}
+
+
 .alert{
-    background:#b72a2a;
-    color: white;
+  background:#b72a2a;
+  color: white;
 }
 
 .jumbotron{
-    background:#2a6bb7;
-    color: white;
+  background:#2a6bb7;
+  color: white;
+}
+
+input,
+input::placeholder {
+    font-size: 14px;
+}
+
+.form-control{
+  font-size: 14px !important;
+}
+
+.scroll-box{
+overflow:scroll;
+height:20% !important;
+max-height: 301px;
+width:97%;
+max-width: 702px;
+border:1px solid rgb(201, 201, 201);
+border-radius: 5px;
+padding: 2.5%;
+background-color: #ffffff8f !important;
 }
 
 .tick::before {
-    content: '\2713';
-    font-size: xx-large; 
-    color: green;
-    animation: fadeOut 3s;
-    animation-delay: 2s;
-    animation-fill-mode: forwards;
-  }
-
-  @keyframes fadeOut {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
-  }
-
-.x::before {
-    content: '\2717';
-    color: red;
-    animation: fadeOut 3s;
-    animation-delay: 2s;
+  content: '\2713';
+  font-size: xx-large; 
+  color: green;
+  animation: fadeOut 3s;
+  animation-delay: 2s;
+  animation-fill-mode: forwards;
 }
 
 @keyframes fadeOut {
@@ -55,101 +70,113 @@
     opacity: 0;
   }
 }
-  
+
+.x::before {
+  content: '\2717';
+  color: red;
+  animation: fadeOut 3s;
+  animation-delay: 2s;
+}
+
+@keyframes fadeOut {
+from {
+  opacity: 1;
+}
+to {
+  opacity: 0;
+}
+}
 
 .text-board{
-    max-width: 600px;
-    text-align: center;
-    margin: 10px auto;
-    background-color: #f2f2f2;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
-    }
+  max-width: 800px;
+  text-align: center;
+  margin: 10px auto;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  }
 
 body {
-    font-family: 'Open Sans', sans-serif;
-    }
-    form {
-    max-width: 600px;
-    margin: 10px auto;
-    background-color: #f2f2f2;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
-    }
-    label {
-    display: block;
-    margin-bottom: 8px;
-    }
-    input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    margin-bottom: 16px;
-    resize: vertical;
-    }
+  font-family: 'Open Sans', sans-serif;
+  }
+  form {
+  max-width: 1000px;
+  margin: 10px auto;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  }
+  label {
+  display: block;
+  margin-bottom: 8px;
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  resize: vertical;
+  }
 
 button{
-        background:#2a6bb7 !important;
-        color: white;
-    }
+      background:#2a6bb7 !important;
+      color: white;
+  }
 
 
 
 
 /* Hide the default input element */
 #fs3-file {
-  display: none;
+display: none;
 }
 
 input[type="file"] {
-    display: none;
+  display: none;
 }
 
 .custom-file-upload {
-    border: 1px solid #ccc;
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-    background:#2a6bb7;
-    color: white;
-    border-radius: 5px;
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  background:#2a6bb7;
+  color: white;
 }
 
 .nowrap {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .button-collapse {
-    display: inline-block;
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 3px;
-    padding: 10px 20px;
-    cursor: pointer;
-    width: 100%;
-  }
-  
-  .button-collapse::before {
-    content: '';
-    display: inline-block;
-    width: 0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-left: 10px solid rgb(255, 255, 255);
-    border-radius: 5px;
-    margin-right: 10px;
-    vertical-align: middle;
-  }
-  
-  .button-collapse.collapsed::before {
-    transform: rotate(90deg);
-  }
-  
+  display: inline-block;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button-collapse::before {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid rgb(255, 255, 255);
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.button-collapse.collapsed::before {
+  transform: rotate(90deg);
+}

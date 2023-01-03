@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 <html>
 
     <head>
@@ -21,7 +23,11 @@
     <body onload="loadData()">
         
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">Convert</a>
+            
+            <a class="navbar-brand" href="/">
+                <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
+                Convert
+            </a>
               <ul class="navbar-nav">
                 <li class="nav-item">
                   <a class="nav-link" href="/files">File Management <span class="sr-only">(current)</span></a>
@@ -47,17 +53,15 @@
             </div>
 
             <div id="spinner_here"></div>
-            
-
-            <div class="p-4">           
-                              
+                                 
                         <form id="convertForm" action="/parameters" method="post">
+                            <div style="max-width: 600;" class="mx-auto">
 
-                            <div class="form-row mb-3 ">
-                                <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".collapse_video" aria-expanded="false" aria-controls="collapseExample">
-                                    Video options
-                                </button>
-                            </div>
+                                <div class="form-row mb-3 ">
+                                    <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".collapse_video" aria-expanded="false" aria-controls="collapseExample" onclick="rotateTriangle(this)">
+                                        Video options
+                                    </button>
+                                </div>
 
                                     <div class="collapse collapse_video">
                                         <div class="form-row">
@@ -98,20 +102,17 @@
 
                                         </div>
                                     </div>
-                                
-                            
-
-                                <div class="mb-3">
-                               
-                                                               
-                                        <hr>
+                                                                                                    
+                                    <hr>
                                     
+                                
                                         <div class="form-row mb-3 ">
                                             <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".collapse_advanced" aria-expanded="false" aria-controls="collapseExample">
                                                 advanced options
                                             </button>
                                         </div>
                                         
+                                    <div class="collapse collapse_advanced">
 
                                         <div class="form-row">
                                             
@@ -132,132 +133,140 @@
                                         </div>
 
                                         <div class="form-row">
-                                                <div class="col mb-3">
-                                                    <div  class=" collapse collapse_advanced">
-                                                        <label for="profile" class="control-label">Codec profile:</label>
-                                                        <select class="form-control" placeholder="default:" name="profile" id="profile">
+                                            <div class="col mb-3">
+                                                <div  class=" collapse collapse_advanced">
+                                                    <label for="profile" class="control-label">Codec profile:</label>
+                                                    <select class="form-control" placeholder="default:" name="profile" id="profile">
 
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                            
-                                                <div class="col mb-3" id="getHidden">
-                                                    <div class="collapse collapse_advanced">
-                                                        <label for="colourspace" class="control-label">Colour space:</label>
-                                                        <select class="form-control" placeholder="default:" name="colourspace" id="colourspace">
-                                                            <option id=""> </option>
-                                                            <option id="bt709">bt709</option>
-                                                            <option id="bt2020">bt2020</option>
-                                                            <option value="bt601-6-525">bt601</option>
-                                                        </select>
-                                                    </div>
+                                                    </select>
                                                 </div>
                                             </div>
 
-                                            <hr class="">
-
-                                            <div class="form-row mb-3">
-                                                <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".colourspace" aria-expanded="false" aria-controls="colourspace" onclick=hideColourspace()>
-                                                    colour options
-                                                </button>
-                                            </div>
-
-                                            <div class="form-row">
-                                                <div class="col mb-3">
-                                                    <div class="collapse colourspace" data-bs-toggle="tooltip" data-placement="left" data-html="true" title="common values are 100, 200 and 1000nits">
-                                                        <label for="peaklum" class="control-label">Nominal peak Luminace:</label>
-                                                        <input class="form-control" type="number" name="peaklum" id="peaklum" placeholder="in nits" min="50" max="1000">
-                                                    </div>
-                                                </div>
-                                            
-
-                                                <div class="col mb-3">
-                                                    <div class="colourspace collapse" data-bs-toggle="tooltip" data-placement="right" data-html="true" title="What to do with out of range Values? <br>
-                                                    <b>clip:</b> <br>Hard Clip them<br>
-                                                    <b>linear:</b> <br>linear map them<br>
-                                                    <b>gamma:</b> <br>map by gamma curve<br>
-                                                    <b>reinhard:</b> <br>preserve brightness<br>
-                                                    <b>hable:</b> <br>preserve dark & bright details<br>
-                                                    <b>mobius:</b> <br>preserve in gamma colours" >
-
-                                                        <label for="tonemap" class="control-label">Tonemap algorith.:</label>
-                                                        <select class="form-control" placeholder="default:" name="tonemap" id="tonemap">
-                                                            <div><option id="clip">clip</option></div>
-                                                            <option id="linear">linear</option>
-                                                            <option id="gamma">gamma</option>
-                                                            <option value="reinhard">reinhard</option>
-                                                            <option value="hable">hable</option>
-                                                            <option value="mobius">mobius</option>
-                                                        </select>
-                                                    </div>
+                                        
+                                            <div class="col mb-3" id="getHidden">
+                                                <div class="collapse collapse_advanced">
+                                                    <label for="colourspace" class="control-label">Colour space:</label>
+                                                    <select class="form-control" placeholder="default:" name="colourspace" id="colourspace">
+                                                        <option id=""> </option>
+                                                        <option id="bt709">bt709</option>
+                                                        <option id="bt2020">bt2020</option>
+                                                        <option value="bt601-6-525">bt601</option>
+                                                    </select>
                                                 </div>
                                             </div>
-
-                                            <div class="form-row">
-                                                <div class="col mb-3">
-                                                    <div class="colourspace collapse">
-                                                        <label for="primaries" class="control-label">Target primaries:</label>
-                                                        <select class="form-control" placeholder="default:" name="primaries" id="primaries">
-                                                            <option id="input">input</option>
-                                                            <option id="709">709</option>
-                                                            <option id="2020">2020</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="col mb-3">
-                                                    <div class="colourspace collapse">
-                                                        <label for="matrix" class="control-label">Target colourspace matrix:</label>
-                                                        <select class="form-control" placeholder="default:" name="matrix" id="matrix">
-                                                            <option id="input">input</option>
-                                                            <option id="709">709</option>
-                                                            <option id="2020_ncl">2020 NCL</option>
-                                                            <option id="2020_cl">2020 CL</option>
-                                                        </select>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-row">
-                                                <div class="col mb-3">
-                                                    <div class="colourspace collapse">
-                                                        <label for="transfer" class="control-label">Transfer charakteristiks:</label>
-                                                        <select class="form-control" placeholder="default:" name="transfer" id="transfer" width="12">
-                                                            <option id="input">input</option>
-                                                            <option id="601">601</option>
-                                                            <option id="709">709</option>
-                                                            <option id="2020_10">bt2020 10bit</option>
-                                                            <option id="2020_12">bt2020 12bit</option>
-                                                            <option id="smpte2084">smpte2084</option>
-                                                            <option id="iec61966-2-1">iec61966-2-1</option>
-                                                            <option id="arib-std-b67">arib-std-b67</option>
-                                                        </select>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col colourspace collapse" >
-                                                    <label class="mx-auto nowrap" for="advanced_colour" style="line-height: 6em;"> Use advanced colours: 
-                                                        <input style="text-align:center; vertical-align:middle" type="checkbox" id="advanced_colour" name="advanced_colour" value="advanced_colour">
-                                                    </label>
-                                                </div>
-                                            </div>
-
-
-
-
-                                            <hr>
-                                                                       
-                                                <div class="mx-auto" id="bucket-data-list">                                            
+                                        </div>
                                     </div>
-                                                               
+
+                                                    <hr class="">
+                                                 
+
+                                        <div class="form-row mb-3">
+                                            <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".colourspace" aria-expanded="false" aria-controls="colourspace" onclick=hideColourspace()>
+                                                colour options
+                                            </button>
+                                        </div>
+
+                                    <div class="collapse colourspace">   
+                                        <div class="form-row">
+
+                                            <div class="col mb-3">
+                                                <div class="colourspace collapse">
+                                                    <label for="transfer" class="control-label">Transferfunction:</label>
+                                                    <select class="form-control" placeholder="default:" name="transfer" id="transfer" width="12">
+                                                        <option id="input">input</option>
+                                                        <option id="601">601</option>
+                                                        <option id="709">709</option>
+                                                        <option id="2020_10">bt2020 10bit</option>
+                                                        <option id="2020_12">bt2020 12bit</option>
+                                                        <option id="smpte2084">smpte2084</option>
+                                                        <option id="iec61966-2-1">iec61966-2-1</option>
+                                                        <option id="arib-std-b67">arib-std-b67</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                     
+                                            <div class="col mb-3">
+                                                <div class="colourspace collapse" data-bs-toggle="tooltip" data-placement="right" data-html="true" title="What to do with out of range Values? <br>
+                                                <b>clip:</b> <br>Hard Clip them<br>
+                                                <b>linear:</b> <br>linear map them<br>
+                                                <b>gamma:</b> <br>map by gamma curve<br>
+                                                <b>reinhard:</b> <br>preserve brightness<br>
+                                                <b>hable:</b> <br>preserve dark & bright details<br>
+                                                <b>mobius:</b> <br>preserve in gamma colours" >
+
+                                                    <label for="tonemap" class="control-label">Tonemap algorith.:</label>
+                                                    <select class="form-control" placeholder="default:" name="tonemap" id="tonemap">
+                                                        <div><option id="clip">clip</option></div>
+                                                        <option id="linear">linear</option>
+                                                        <option id="gamma">gamma</option>
+                                                        <option value="reinhard">reinhard</option>
+                                                        <option value="hable">hable</option>
+                                                        <option value="mobius">mobius</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="col mb-3">
+                                                <div class="colourspace collapse">
+                                                    <label for="primaries" class="control-label">Primaries:</label>
+                                                    <select class="form-control" placeholder="default:" name="primaries" id="primaries">
+                                                        <option id="input">input</option>
+                                                        <option id="709">709</option>
+                                                        <option id="2020">2020</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col mb-3">
+                                                <div class="colourspace collapse">
+                                                    <label for="matrix" class="control-label">Colour matrix:</label>
+                                                    <select class="form-control" placeholder="default:" name="matrix" id="matrix">
+                                                        <option id="input">input</option>
+                                                        <option id="709">709</option>
+                                                        <option id="2020_ncl">2020 NCL</option>
+                                                        <option id="2020_cl">2020 CL</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+
+                                            <div class="col-sm-6">
+                                                <div class="collapse colourspace" data-bs-toggle="tooltip" data-placement="left" data-html="true" title="common values are 100, 200 and 1000nits">
+                                                    <label for="peaklum" class="control-label">Peak luminace:</label>
+                                                    <input class="form-control" type="number" name="peaklum" id="peaklum" placeholder="in nits" min="50" max="1000">
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col colourspace collapse" >
+                                            <label class="mx-auto nowrap" for="advanced_colour" style="line-height: 5em;"> Use advanced colours: 
+                                                <input style="text-align:center; vertical-align:middle" type="checkbox" id="advanced_colour" name="advanced_colour" value="advanced_colour">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+
+
+
+
+                                    <hr>
+                                                                    
+                                                <div class="mx-auto scroll-box" id="bucket-data-list">                                            
+                                    </div>
+                                                            
                                     <input id= "hidden_url" type="hidden" name="url">
                                     <input id= "hidden_filename" type="hidden" name="filename">
+                                        
+                                    
                                 
-                                </div>
-                     
                         </form>
             </row>                      
         </div>
@@ -425,25 +434,41 @@
             //adds basic client side form validation
             function formValidation(){
                 var breakFunc = 1;
+
+                var outputName = document.getElementById('outputName').value;
                 var outputFormat = document.getElementById('outputFormat').value;
+                var codec = document.getElementById('codec').value;
+                var profile = document.getElementById('profile').value;               
+                var bitrate = document.getElementById('bitrate').value;
+
                 if (outputFormat === "") {
                     alert('Please select a container!');
                     breakFunc=0;               
                 }
 
-                var outputName = document.getElementById('outputName').value;
                 if (outputName === "") {
                     alert('Please select a output name!');
                     breakFunc=0;
                 }
 
-                var codec = document.getElementById('codec').value;
+                
                 if (codec === "") {
                     alert('Please select a codec!');
                     breakFunc=0;
                 }
                 
-                var bitrate = document.getElementById('bitrate').value;
+                if (codec === "dnxhd") {
+                    if (profile === ""){
+                        alert('Please select a profile under advanced options!');
+                        breakFunc=0;
+                    }
+                    if (bitrate != "" ){
+                        alert('Please choose bitrate via profile under advanced options!');
+                        breakFunc=0;
+                    }               
+                }
+
+                
                 if (bitrate > 50) {
                     alert('Bitrate is to high!');
                     breakFunc=0;                    
