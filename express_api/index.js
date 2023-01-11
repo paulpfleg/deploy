@@ -35,7 +35,7 @@ app.listen(
 app.get("/", function(req, res) {
     res.sendFile(__dirname + "/index.html");
   });
-
+ 
 // post endpoint for ffmpeg conversions
 app.post('/convert/', (req,res) => {
 
@@ -59,7 +59,7 @@ if (checkString(ffmpeg_convert.command)){
                     file.close();
                     console.log("Download Completed");
                 }catch (exception){
-                    still_to_send=sendresponse(4,res,still_to_send);
+                    still_to_send=sendresponse(3,res,still_to_send);
                 }
 
                 try{
@@ -67,7 +67,7 @@ if (checkString(ffmpeg_convert.command)){
                     exec(ffmpeg_convert.command, (error, stdout, stderr) => {
                         if (error) {
                             console.error(`error: ${error.message}`);
-                            still_to_send=sendresponse(1,res,still_to_send)
+                            still_to_send=sendresponse(0,res,still_to_send,error.message)
                             return;
                         }
 
@@ -94,11 +94,12 @@ if (checkString(ffmpeg_convert.command)){
                             }
                         )
                         .catch(() => {
-                            still_to_send=sendresponse(2,res,still_to_send);
+                            still_to_send=sendresponse(1,res,still_to_send);
                         })
                     });
                 }catch (exception){
-                    still_to_send=sendresponse(1,res,still_to_send);
+                    // sends undefined error
+                    still_to_send=sendresponse(5,res,still_to_send);
             }
             });
         });
@@ -138,8 +139,6 @@ function createFFmpegString(body,filename){
 format=gbrpf32le,zscale=p=${primaries},tonemap=tonemap=${tonemap}:desat=0,\
 zscale=t=${transfer}:m=${matrix}:r=tv,format=yuv420p`
         console.log("Colour String: "+colour_string);
-
-        
     }
 
     //build the conversion / encoding string form requests parameters
@@ -178,17 +177,20 @@ function checkString(String){
 }
 
 //function to send the response for the processed request
-function sendresponse(code,res,still_to_send){
+function sendresponse(code,res,still_to_send,additional){
     //check if response was allready send
     if (still_to_send) {
 
         //arry with error codes
-        const erroArray = ["ffmpeg command","file upload","local file deletation","file download","illegal sign"]
+        const erroArray = ["ffmpeg command","file upload","local file deletation","file download","illegal sign"];
+        const additional_info = additional;
 
         res.send({
             status : "error",
             error_code: `00${code}`,
-            error_message : `${erroArray[code]} error`
+            additional_info : `${additional_info}`,
+            error_message : `${erroArray[code]} error`,
+            
         })
         return false
     }

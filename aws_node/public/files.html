@@ -14,20 +14,23 @@
 
 
     <body onload="loadData()">
-
+        
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">Convert</a>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            
+            <a class="navbar-brand" href="/">
+                <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
+                Convert
+            </a>
               <ul class="navbar-nav">
-                <li class="nav-item active">
+                <li class="nav-item">
                   <a class="nav-link" href="/files">File Management <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="/about">About</a>
                 </li>
               </ul>
-            </div>
-          </nav>
+            
+        </nav>
           
 
         <div class="container" >
@@ -64,9 +67,9 @@
 
                             <div class="col-sm-1"></div>
 
-                        </div>
-
                     </div>
+
+                </div>
                     <div class="col-sm-1"></div>
             
                 </div>
@@ -77,14 +80,14 @@
 
                             <h2>Download Files</h2>
 
-                                <div id="bucket-data-list" class="mx-auto">
+                                <div id="bucket-data-list" class="mx-auto scroll-box">
                                 </div>
                     
                             <hr>
 
                             <h2>Delete Files</h2>
 
-                                <div id="bucket-data-list-delete" class="mx-auto"></div>
+                                <div id="bucket-data-list-delete" class="mx-auto scroll-box"></div>
                                 </div>
                             <input id= "hidden_filename" type="hidden" name="filename">
                     </div>
