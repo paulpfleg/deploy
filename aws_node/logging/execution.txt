@@ -67,3 +67,4 @@
  Current Time: 10:38 Execution time: 1021.9849069993943; Status:connection error
  Current Time: 10:39 Execution time: 1017.1754250004888; Status:connection error
  Current Time: 10:41 Execution time: 9289.891862999648; Status:connection error
+ Current Time: 11:12 Execution time: 27117.291043000296; Status:ffmpeg command error
