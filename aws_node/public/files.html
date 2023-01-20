@@ -1,194 +1,155 @@
-
-
+<!DOCTYPE html>
+<!-- file page, to manage content of S3-Bucket -->
 <html>
 
 
     <head>
-
-        <title>Convert Media S3</title>
+        <title>Media Cloud Encoder</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+        <link rel="stylesheet" type="text/css" href="/CSS/main.css">
     </head>
 
 
 
     <body onload="loadData()">
 
+        <!-- Pageheader - Navmenü -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">Convert</a>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <a class="navbar-brand" href="/">
+                <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
+                Convert
+            </a>
               <ul class="navbar-nav">
-                <li class="nav-item active">
+                <li class="nav-item">
                   <a class="nav-link" href="/files">File Management <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="/about">About</a>
                 </li>
               </ul>
-            </div>
-          </nav>
+        </nav>
           
 
         <div class="container" >
-            <div style="background:#2a6bb7; color: white !important" class="jumbotron mt-4">
+            <div class="jumbotron mt-4">
                 <div class="mx-auto" style="width: 20rem;">
                     <div>
                         <h1>Manage Files</h1>
                     </div>
                     <div>
-                        <p>Upload and download files you want to convert at the convert page.</p>
+                        <p>Upload and download files you want to process on the convert page.</p>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-sm-4 mx-auto mb-3">
-                <h2>Upload Files</h2>
-                <input  type="file" id="s3-file" onchange="saveFile(this)"/>
-            </div>
-
-            <div class="row">
-
-                <div class="col-sm-12">
-                    <h2>Download Files</h2>
-                    <div class= "card-columns mb-3" id="container">
-
-                        <div id="bucket-data-list">
-                    </div>
-
-                    </div>
-                </div>
-
-                
-
-                <div class="col-sm-12">
-                    <h2>Delete Files</h2>
-                    <div class= "card-columns mb-3" id="container">
-
-                        <div id="bucket-data-list-delete">
-                    </div>
-
-                    <form id="deleteForm" action="/delete-from-s3" method="post">
-                        <input id= "hidden_filename" type="hidden" name="filename">
-                    </form>
-
-
-                </div>
-
             </div>
             
+            
+            <div class="p-4">
+                <div class="row">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-8 text-board">
+                        
+                        <h2>Upload Files</h2>
+                        
+                        <div class="row"></div>
+                        <div id="waiter" class="col-sm-7"></div>
 
-            <script>
-                let list = [];
-                function saveFile(event) {
-                    const xhr = new XMLHttpRequest();
-                    const formData = new FormData();
-                    const file = event.files[0];
-                    formData.append('s3-file', file);
+                            <!-- Upload Button -->
+                        <label class="col-sm-4 custom-file-upload">
+                            <input  type="file" id="s3-file" onchange="saveFile(this)"/>
+                            Upload File
+                        </label>
+                        <div class="col-sm-1"></div>
+                    </div>
+                </div>
+                <div class="col-sm-1"></div>
+            </div>
 
-                    xhr.onreadystatechange = (state) => {
-                        if(xhr.readyState === XMLHttpRequest.DONE) {
-                        }
+            <form id="deleteForm" class="px-4 py-3" action="/delete-from-s3" method="post">
+                <div class="mb-3">
+                    <h2>Download Files</h2>
+                    <div id="bucket-data-list" class="mx-auto scroll-box"></div>
+                    <hr>
+                    <h2>Delete Files</h2>
+                    <div id="bucket-data-list-delete" class="mx-auto scroll-box"></div>
+                </div>
+                <input id= "hidden_filename" type="hidden" name="filename">
+            </form>
+        </div>
+        
+        <script type="text/javascript" src="/functions/utilities.js"></script>
+
+        <script>
+            let list = [];
+
+            //sends a post Request endpoint, to upload a new file to S3
+            function saveFile(event) {
+                const xhr = new XMLHttpRequest();
+                const formData = new FormData();
+                const file = event.files[0];
+                formData.append('s3-file', file);
+
+                xhr.onload = async function() {
+                    if (xhr.status === 200) {
+                        document.getElementById('waiter').innerHTML = `<div class="tick"></div>`
+                        await redirectToPage('/files');                       
+                    } else {
+                        document.getElementById('waiter').innerHTML = `<div class="x"></div>`
                     }
+                };
 
-                    xhr.timeout = 5000;
-                    xhr.open('POST', '/upload-to-s3');
-                    xhr.send(formData);
+                xhr.onreadystatechange = state => {
                 }
 
-                function loadData() {
-                    getBucketObjectList();
-                    getBucketObjectListDelete();
-                }
+                xhr.timeout = 10000;
+                xhr.open('POST', '/upload-to-s3');
+                xhr.send(formData)
+                document.getElementById('waiter').innerHTML = `
+                    <div class="spinner-border m-3 d-flex justify-content-center" style="width: 3rem; height: 3rem;" role="status">
+                    <span style="background:#2a6bb7; color: white !important"  class="sr-only">Loading...</span>
+                    </div>
+                `;
+            }
 
-                function getBucketObjectList() {
-                    getData('/all-files', (data = []) => {
-                        data = JSON.parse(data);
-                        list = data;
-                        const objectList = data.map((item, index) => {
-                            return `
-                            <div class="mb-3 card " onclick="downloadFile(${index})">
-                                        <div style="background:#2a6bb7; color: white !important" class="card-header">
-                                            <b class="card-title">${item.key}</b> 
-                                        </div>
-                                        <div class="card-body">
-                                            File Size: ${item.size} 
-                                            <br>
-                                            File Modified: ${item.lastModified.slice(0,-8).replace(/-/g, ".").replace(/T/g, " ")}
-                                        </div>
-                            </div>
-                            <br>                                        
-                            `
+            function loadData() {
 
-
-                        });
-                        document.getElementById('bucket-data-list').innerHTML = objectList.join(" ");
-                    });
-                }
-
-                function getBucketObjectListDelete() {
-                    getData('/all-files', (data = []) => {
-                        data = JSON.parse(data);
-                        list = data;
-                        const objectList = data.map((item, index) => {
-                            return `
-                            <div class="mb-3 card" onclick="deleteFile(${index})">
-                                        <div class="card-header" style="background:#2a6bb7; color: white !important">
-                                            <b class="card-title">${item.key}</b> 
-                                        </div>
-                                        <div class="card-body">
-                                            File Size: ${item.size} 
-                                            <br>
-                                            File Modified: ${item.lastModified.slice(0,-8).replace(/-/g, ".").replace(/T/g, " ")}
-                                        </div>
-                            </div>
-                            <br>                                        
-                            `
-
-
-                        });
-                        document.getElementById('bucket-data-list-delete').innerHTML = objectList.join(" ");
-                    });
-                }
-
-                function downloadFile(index) {
-                const fileName = (list[index] || {}).key;
-                getData(`/get-object-url/${fileName}`, (url) => {
-                    window.open(url, '_blank');
-                    console.log(url);
+                getData('/all-files', "GET" , (data = []) => {
+                    listAll(data,"downloadFile","bucket-data-list");
+                    listAll(data,"deleteFile","bucket-data-list-delete");
                 });
             }
 
-                async function deleteFile(index) {
-                const fileName = (list[index] || {}).key;
-                document.getElementById("hidden_filename").value = fileName;
-                if (confirm(`Do you really want to delete ${fileName}?`)) {
-                document.getElementById("deleteForm").submit(function(eventObj) {
-                    return true;
-                });
-                } else return false;
-                }
+            // opens presigned URL in new Window
+            function downloadFile(index) {
+            const fileName = (list[index] || {}).key;
+            getData(`/get-object-url/${fileName}`, "GET" , (url) => {
+                window.open(url, '_blank');
+                console.log(url);
+            });
+        }
+            //Delete the clicked File from S3
+            async function deleteFile(index) {
+            const fileName = (list[index] || {}).key;
+            document.getElementById("hidden_filename").value = fileName;
+            //Alert, to confirm the deletation 
+            if (confirm(`Do you really want to delete ${fileName}?`)) {
+            document.getElementById("deleteForm").submit(function(eventObj) {
+                return true;
+            });
+            } else return false;
+            }
 
+            // fuction to redirect to / reload page after a certain action waits certain amount of time
+            async function redirectToPage(url) {
+                await new Promise(resolve => setTimeout(resolve, 4000));
+                window.location.href = url;
+            }
+        </script>
 
-                function getData(url, cb) {
-                    const xhr = new XMLHttpRequest();
-                    xhr.onreadystatechange = state => {
-                        if(xhr.readyState === XMLHttpRequest.DONE) {
-                            cb(xhr.responseText);
-                        }
-                    }
-                    xhr.timeout = 10000;
-                    xhr.open('GET', url);
-                    xhr.send();
-                }
-            </script>
-
-            <!-- Bootstrap scripts -->
-
-            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        </div>
+        <!-- Bootstrap scripts -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </body>
 </html>
 

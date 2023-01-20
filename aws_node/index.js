@@ -17,7 +17,7 @@ app.use(logger)
 app.set('views', path.join(__dirname, 'public'));
 
 app.use(express.json())
-//app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public"));
 
 app.use(bodyParser.urlencoded({
     extended:true
@@ -46,6 +46,10 @@ app.get('/about', (req, res) => {
     res.sendFile(__dirname + '/public/about.html')
 });
 
+app.get("/new", function(req, res) {
+  res.sendFile(__dirname + "/public/new.html");
+});
+
 // // --- Endpoits for Functions ---
 
 app.post('/upload-to-s3', s3Controller.s3Upload);
@@ -61,16 +65,15 @@ app.post('/parameters', function(req,res){
     console.log("--- Incomming request --- %j",req.body);
     console.log('---- TIME:' + stamp() );
 
-    //var prove = sendRequest();
-      req.body.outputName=req.body.outputName.concat(`${i}`)
-      call(req,res,i);
+  //var prove = sendRequest();
+      call(req,res);
       execSync('sleep 1');
 });
 
-  //starts the node Server
-  app.listen(PORT, () => {
-    console.log(`its alive on http://localhost:${PORT}`);
-  });
+//starts the node Server
+app.listen(PORT, () => {
+  console.log(`its alive on http://localhost:${PORT}`);
+});
 
 
 function sendRequest(options) {
@@ -88,23 +91,20 @@ function sendRequest(options) {
       else{
       console.log(`Status: ${res.statusCode}`);
       resolve(res);
-      }
-      
-      
-            
+      }         
     })
   });
 }
 
 // Logger function mainly to showcase middleware
-function logger (req,res,next) {
+function logger (req,res,next){
 console.log("Site "+req.originalUrl+" has been requested")
 next()
 }
 
-async function call(param1,param2) {
+async function call(req,res) {
 
-  const body = param1.body
+  const body = req.body
 
   // maps req. parameters to new json object, to send it to the backend
   var options = {
@@ -132,46 +132,44 @@ async function call(param1,param2) {
 
   var execTime = "";
 
-    console.log("--- Out Going Request --- %j" , options.body);
-    console.log("to %j  ---- TIME " + stamp(),  options.url);
+  console.log("--- Out Going Request --- %j" , options.body);
+  console.log("to %j  ---- TIME " + stamp(),  options.url);
 
-    //get time, when request is send
-    var startTime = performance.now();
+  //get time, when request is send
+  var startTime = performance.now();
 
-    var prove = await sendRequest(options);
+  // wait for response from Backend
+  var prove = await sendRequest(options);
       
-      console.log("Response: %j", prove.body);
-      if (prove.body.status === "ok") {
-        param2.sendFile(__dirname + '/public/sucess.html');
-        logging();
-        
-      }
-      else {
-        param2.render('error.ejs', { error: prove.body.error_message });
-        logging();
-      }
+  console.log("Response: %j", prove.body);
+  if (prove.body.status === "ok") {
+    res.sendFile(__dirname + '/public/sucess.html');
+    logging(startTime,prove);}
+  else {
+    res.render('error.ejs', { body: prove.body});
+    logging(startTime,prove);
+  }
 
-      
-      
-      function logging(){
-          var endTime = performance.now();
-          execTime= `\n Current Time: ${stamp()} Execution time: ${endTime-startTime}; Status:${prove.body.error_message ? prove.body.error_message : prove.body.status}`;
-          console.log(execTime);
-          fs.appendFile("./logging/execution.txt",execTime, function(err) {
-            if(err) {
-                return console.log(err);
-            }
-        
-            console.log("The file was saved!");
-          }); 
-      }
-
-
-
-
-    
 }
 
+//log the time taken, for the requests
+function logging(startTime,prove){
+  //get the current time (in ms timestamp)
+  var endTime = performance.now();
+  // calculate time difference between start and end of the request
+  execTime= `\n Current Time: ${stamp()} Execution time: ${endTime-startTime}; Status:${prove.body.error_message ? prove.body.error_message : prove.body.status}`;
+  console.log(execTime);
+  // write to log file
+  fs.appendFile("./logging/execution.txt",execTime, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+  }); 
+}
+
+//function to return a timestamp of the moment, the function was called
 function stamp(){
   const dateObject = new Date();
   // current date

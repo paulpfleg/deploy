@@ -1,6 +1,10 @@
-const formidable = require('formidable');
 const {uploadFileToS3, getBucketListFromS3, getPresignedURL} = require('./s3-service');
 
+
+// -- the file provides functions to adjust in- / out-puts of aws sdk and handel common errors
+
+
+// async call to upload function in s3-service file
 async function s3Upload (file_path,filename,converted) {
     try{
         await uploadFileToS3(file_path,filename, 'ffmpeg-node',()=>{
@@ -12,6 +16,7 @@ async function s3Upload (file_path,filename,converted) {
     }
 }
 
+//same as aboth returns a list objects containing the infos below
 async function s3Get (req, res) {
     try{
         const bucketData = await getBucketListFromS3('ffmpeg-node');

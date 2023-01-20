@@ -3,33 +3,34 @@
 
     <head>
 
-        <title>Convert Media S3</title>
+        <title>Media Cloud Encoder</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+        <link rel="stylesheet" type="text/css" href="/CSS/main.css">
     </head>
 
 
 
     <body onload="loadData()">
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">Convert</a>
-            <div class="collapse navbar-collapse" id="navbarNav">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">            
+            <a class="navbar-brand" href="/">
+                <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
+                Convert
+            </a>
               <ul class="navbar-nav">
-                <li class="nav-item ">
+                <li class="nav-item">
                   <a class="nav-link" href="/files">File Management <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                   <a class="nav-link" href="/about">About</a>
                 </li>
               </ul>
-            </div>
-          </nav>
+        </nav>
           
 
         <div class="container">
-            <div style="background:#2a6bb7; color: white !important" class="jumbotron mt-4">
+            <div class="jumbotron mt-4">
                 <div class="mx-auto" style="width: 20rem;">
                     <div>
                         <h1>About</h1>
@@ -40,26 +41,19 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row text-board">
 
-                <div class="col-sm-2" ></div>
-
-                <div class="col-sm-4 mb-3">
+                <div class="p-4">
                     <h2>Usage</h2>
-                    <p> The content uploaded on the files page can be encoded on the convert page. 
-                        Therefore the convert parameters can be specified at the left of the convert page.
-                        The paramters are then applied by clicking one of the files stored in the S3 bucket.    
+                    <p style="text-align:justify"> The content uploaded on the files page can be encoded on the conversion page.
+                        Therefore, the conversion parameters can be specified on the left of the convert page.
+                        The parameters are then applied by clicking one of the files stored in the S3 bucket.    
                     </p>
                 </div>
 
-                <div class="col-sm-4">
-
-
-                </div>
-                </div>
-
-                <div class="col-sm-2" ></div>
             </div>
+
+        </div>
 
             <!-- Bootstrap scripts -->
 

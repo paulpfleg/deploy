@@ -2,65 +2,87 @@
 
 <html>
 
+    <!-- Page for dynamic error page render -->
 
     <head>
 
         <title>Convert Media S3</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+        <link rel="stylesheet" type="text/css" href="/CSS/main.css">
     </head>
 
 
 
-    <body onload="loadData()">
+    <body">
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">Convert</a>
-            <div class="collapse navbar-collapse" id="navbarNav">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">            
+            <a class="navbar-brand" href="/">
+                <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
+                Convert
+            </a>
               <ul class="navbar-nav">
-                <li class="nav-item ">
+                <li class="nav-item">
                   <a class="nav-link" href="/files">File Management <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                   <a class="nav-link" href="/about">About</a>
                 </li>
               </ul>
-            </div>
-          </nav>
+        </nav>
           
 
         <div class="container">
             <div style="background:#2a6bb7; color: white !important" class="jumbotron mt-4">
-                <div class="mx-auto" style="width: 20rem;">
+                <div class="mx-auto">
                     <div>
-                        <h1>An error occured!</h1>
+                        <h1 style="text-align: center;">An error occured!</h1>
                     </div>
                     <div>
-
-                        <h2><%= error %> </h2>
+                        <!-- error message inserted in this headding -->
+                        <h2><%= body.error_message %> </h2>
                     </div>
                 </div>
             </div>
+
+                <form action="" style="max-width: 700;">
+
+
+                    <div class="col-sm-8 mx-auto">
+                        <h2>Further steps:</h2>
+                        <p> Please try to make the request again and check if the parameters meet the codec's specifications.
+                        </p>
+                    </div>
+
+                    <hr style="margin-top: 30px; margin-bottom: 30px;">
+
+                    <div class="form-row mb-3 ">
+
+                        <button class="button-collapse mx-auto mb-3" type="button" data-toggle="collapse" data-target=".collapse_additional" aria-expanded="false" aria-controls="collapseExample">
+                            additional informations
+                        </button>
+
+                        <div class="collapse collapse_additional">
+
+                                <div class="scroll-box mx-auto" style="min-height: 400px; background-color: white;">
+                                    <!-- scroll trough console output of the errored process -->
+                                    <%= body.additional_info %>
+                                </div>
+
+                        </div>
+                    </div>
+                </form>
 
             <div class="row">
 
                 <div class="col-sm-2" ></div>
 
-                <div class="col-sm-4 mb-3 mx-auto">
-                    <h2>Further steps:</h2>
-                    <p> Please try to make the request again and check if the parameters meet the codec's specifications.
-                    </p>
-                </div>
 
-                <div class="col-sm-4">
-
-
-                </div>
-                </div>
-
-                <div class="col-sm-2" ></div>
+                <div class="col-sm-4"></div>
             </div>
+
+            <div class="col-sm-2" ></div>
+        </div>
 
             <!-- Bootstrap scripts -->
 
