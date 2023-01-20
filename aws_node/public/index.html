@@ -5,16 +5,10 @@
     <head>
         <title>Media Cloud Encoder</title>
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
-
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
         <link rel="stylesheet" type="text/css" href="/CSS/main.css">
-
-        <style>
-
-        </style>
-
     </head>
 
     <body onload="loadData()">
@@ -51,217 +45,209 @@
             <!-- div where the spinner is inserted when reques in process -->
             <div id="spinner_here"></div>
                                  
-                        <form id="convertForm" action="/parameters" method="post">
-                            <div style="max-width: 600;" class="mx-auto">
+                <form id="convertForm" action="/parameters" method="post">
+                    <div style="max-width: 600;" class="mx-auto">
 
-                                <div class="form-row mb-3 ">
-                                    <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".collapse_video" aria-expanded="false" aria-controls="collapseExample">
-                                        Video options
-                                    </button>
+                        <div class="form-row mb-3 ">
+                            <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".collapse_video" aria-expanded="false" aria-controls="collapseExample">
+                                Video options
+                            </button>
+                        </div>
+
+                        <div class="collapse collapse_video">
+                            <div class="form-row">
+                                <div class="col mb-3">
+                                    <label for="bitrate" class="control-label">Bitrate:</label>
+                                    <input class=" form-control" type="number" name="bitrate" id="bitrate" placeholder="in Mb/s" min="0.01" max="50">
+                                </div>
+                                <div class="col mb-3">
+                                    <label for="outputName" class="control-label">Output Filename:</label>
+                                    <input class=" form-control" type="text" name="outputName" id="outputName" placeholder="Output Name" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col mb-3">
+                                    <label for="outputFormat" class="control-label">Video Container:</label>
+                                    <select class="form-control " placeholder="default: mp4" name="outputFormat" id="outputFormat" required onChange="visibility(`outputFormat`,`codec`,objectCodec)">
+                                        <option>mp4</option>
+                                        <option>mov</option>
+                                        <option>mkv</option>
+                                        <option>mxf</option>
+                                    </select>
                                 </div>
 
-                                    <div class="collapse collapse_video">
-                                        <div class="form-row">
-                                            <div class="col mb-3">
-                                                <label for="bitrate" class="control-label">Bitrate:</label>
-                                                <input class=" form-control" type="number" name="bitrate" id="bitrate" placeholder="in Mb/s" min="0.01" max="50">
-                                            </div>
-                                            <div class="col mb-3">
-                                                <label for="outputName" class="control-label">Output Filename:</label>
-                                                <input class=" form-control" type="text" name="outputName" id="outputName" placeholder="Output Name" required>
-                                            </div>
-                                        </div>
+                            
 
-                                        <div class="form-row">
-                                            <div class="col mb-3">
-                                                <label for="outputFormat" class="control-label">Video Container:</label>
-                                                <select class="form-control " placeholder="default: mp4" name="outputFormat" id="outputFormat" required onChange="visibility(`outputFormat`,`codec`,objectCodec)">
-                                                    <option>mp4</option>
-                                                    <option>mov</option>
-                                                    <option>mkv</option>
-                                                    <option>mxf</option>
-                                                </select>
-                                            </div>
+                                <div class="col mb-3">
+                                    <label for="codec" class="control-label">Video Codec:</label>
+                                    <select class="form-control" placeholder="default: h264" name="codec" id="codec" required onChange="visibility(`codec`,`profile`,objectProfile)">
+                                        <option id="h264">h264</option>
+                                        <option id="hevc">hevc</option>
+                                        <option id="vp9">vp9</option>
+                                        <option id="prores">prores</option>
+                                        <option id="dnxhd">dnxhd</option>
+                                    </select>
+                                </div>
 
-                                        
+                            </div>
+                        </div>
+                                                                                        
+                        <hr>
+                        
+                        <div class="form-row mb-3 ">
+                            <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".collapse_advanced" aria-expanded="false" aria-controls="collapseExample">
+                                advanced options
+                            </button>
+                        </div>
+                            
+                        <div class="collapse collapse_advanced">
 
-                                            <div class="col mb-3">
-                                                <label for="codec" class="control-label">Video Codec:</label>
-                                                <select class="form-control" placeholder="default: h264" name="codec" id="codec" required onChange="visibility(`codec`,`profile`,objectProfile)">
-                                                    <option id="h264">h264</option>
-                                                    <option id="hevc">hevc</option>
-                                                    <option id="vp9">vp9</option>
-                                                    <option id="prores">prores</option>
-                                                    <option id="dnxhd">dnxhd</option>
-                                                </select>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                                                                                    
-                                    <hr>
-                                    
+                            <div class="form-row">
                                 
-                                    <div class="form-row mb-3 ">
-                                        <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".collapse_advanced" aria-expanded="false" aria-controls="collapseExample">
-                                            advanced options
-                                        </button>
-                                    </div>
-                                        
+                                <div class="col mb-3">
                                     <div class="collapse collapse_advanced">
-
-                                        <div class="form-row">
-                                            
-                                            <div class="col mb-3">
-                                                <div class="collapse collapse_advanced">
-                                                    <label for="width" class="control-label">Target width:</label>
-                                                    <input type="number" class="form-control" placeholder="leave blank for original" name="width" id="width" min="200" max="4096">
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="col mb-3">
-                                                <div class="collapse collapse_advanced">
-                                                    <label for="height" class="control-label">Target height:</label>
-                                                    <input type="number" class="form-control" placeholder="leave blank for original" name="height" id="height" min="200" max="2304">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-row">
-                                            <div class="col mb-3">
-                                                <div  class=" collapse collapse_advanced">
-                                                    <label for="profile" class="control-label">Codec profile:</label>
-                                                    <select class="form-control" placeholder="default:" name="profile" id="profile">
-
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                        
-                                            <div class="col mb-3" id="getHidden">
-                                                <div class="collapse collapse_advanced">
-                                                    <label for="colourspace" class="control-label">Colour space:</label>
-                                                    <select class="form-control" placeholder="default:" name="colourspace" id="colourspace">
-                                                        <option id=""> </option>
-                                                        <option id="bt709">bt709</option>
-                                                        <option id="bt2020">bt2020</option>
-                                                        <option value="bt601-6-525">bt601</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <label for="width" class="control-label">Target width:</label>
+                                        <input type="number" class="form-control" placeholder="leave blank for original" name="width" id="width" min="200" max="4096">
                                     </div>
-
-                                    <hr class="">
-                                                 
-
-                                    <div class="form-row mb-3">
-                                        <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".colourspace" aria-expanded="false" aria-controls="colourspace" onclick=hideColourspace()>
-                                            colour options
-                                        </button>
-                                    </div>
-
-                                    <div class="collapse colourspace">   
-                                        <div class="form-row">
-                                            <div class="col mb-3">
-                                                <div class="colourspace collapse">
-                                                    <label for="transfer" class="control-label">Transferfunction:</label>
-                                                    <select class="form-control" placeholder="default:" name="transfer" id="transfer" width="12">
-                                                        <option id="input">input</option>
-                                                        <option id="601">601</option>
-                                                        <option id="709">709</option>
-                                                        <option id="2020_10">bt2020 10bit</option>
-                                                        <option id="2020_12">bt2020 12bit</option>
-                                                        <option id="smpte2084">smpte2084</option>
-                                                        <option id="iec61966-2-1">iec61966-2-1</option>
-                                                        <option id="arib-std-b67">arib-std-b67</option>
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                     
-                                            <div class="col mb-3">
-                                                <div class="colourspace collapse" data-bs-toggle="tooltip" data-placement="right" data-html="true" title="What to do with out of range Values? <br>
-                                                <b>clip:</b> <br>Hard Clip them<br>
-                                                <b>linear:</b> <br>linear map them<br>
-                                                <b>gamma:</b> <br>map by gamma curve<br>
-                                                <b>reinhard:</b> <br>preserve brightness<br>
-                                                <b>hable:</b> <br>preserve dark & bright details<br>
-                                                <b>mobius:</b> <br>preserve in gamma colours" >
-
-                                                    <label for="tonemap" class="control-label">Tonemap algorith.:</label>
-                                                    <select class="form-control" placeholder="default:" name="tonemap" id="tonemap">
-                                                        <div><option id="clip">clip</option></div>
-                                                        <option id="linear">linear</option>
-                                                        <option id="gamma">gamma</option>
-                                                        <option value="reinhard">reinhard</option>
-                                                        <option value="hable">hable</option>
-                                                        <option value="mobius">mobius</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-row">
-                                            <div class="col mb-3">
-                                                <div class="colourspace collapse">
-                                                    <label for="primaries" class="control-label">Primaries:</label>
-                                                    <select class="form-control" placeholder="default:" name="primaries" id="primaries">
-                                                        <option id="input">input</option>
-                                                        <option id="709">709</option>
-                                                        <option id="2020">2020</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="col mb-3">
-                                                <div class="colourspace collapse">
-                                                    <label for="matrix" class="control-label">Colour matrix:</label>
-                                                    <select class="form-control" placeholder="default:" name="matrix" id="matrix">
-                                                        <option id="input">input</option>
-                                                        <option id="709">709</option>
-                                                        <option id="2020_ncl">2020 NCL</option>
-                                                        <option id="2020_cl">2020 CL</option>
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-row">
-
-                                            <div class="col-sm-6">
-                                                <div class="collapse colourspace" data-bs-toggle="tooltip" data-placement="left" data-html="true" title="common values are 100, 200 and 1000nits">
-                                                    <label for="peaklum" class="control-label">Peak luminace:</label>
-                                                    <input class="form-control" type="number" name="peaklum" id="peaklum" placeholder="in nits" min="50" max="1000">
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col colourspace collapse" >
-                                            <label class="mx-auto nowrap" for="advanced_colour" style="line-height: 5em;"> Use advanced colours: 
-                                                <input style="text-align:center; vertical-align:middle" type="checkbox" id="advanced_colour" name="advanced_colour" value="advanced_colour">
-                                            </label>
-                                        </div>
-                                    </div>
-                                    
-
-
-
-
-                                    <hr>
-                                                                    
-                                                <div class="mx-auto scroll-box" id="bucket-data-list">                                            
-                                    </div>
-                                                            
-                                    <input id= "hidden_url" type="hidden" name="url">
-                                    <input id= "hidden_filename" type="hidden" name="filename">
-                                        
-                                    
+                                </div>
                                 
-                        </form>
+                                <div class="col mb-3">
+                                    <div class="collapse collapse_advanced">
+                                        <label for="height" class="control-label">Target height:</label>
+                                        <input type="number" class="form-control" placeholder="leave blank for original" name="height" id="height" min="200" max="2304">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col mb-3">
+                                    <div  class=" collapse collapse_advanced">
+                                        <label for="profile" class="control-label">Codec profile:</label>
+                                        <select class="form-control" placeholder="default:" name="profile" id="profile">
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                            
+                                <div class="col mb-3" id="getHidden">
+                                    <div class="collapse collapse_advanced">
+                                        <label for="colourspace" class="control-label">Colour space:</label>
+                                        <select class="form-control" placeholder="default:" name="colourspace" id="colourspace">
+                                            <option id=""> </option>
+                                            <option id="bt709">bt709</option>
+                                            <option id="bt2020">bt2020</option>
+                                            <option value="bt601-6-525">bt601</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="">
+                                        
+                        <div class="form-row mb-3">
+                            <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".colourspace" aria-expanded="false" aria-controls="colourspace" onclick=hideColourspace()>
+                                colour options
+                            </button>
+                        </div>
+
+                        <div class="collapse colourspace">   
+                            <div class="form-row">
+                                <div class="col mb-3">
+                                    <div class="colourspace collapse">
+                                        <label for="transfer" class="control-label">Transferfunction:</label>
+                                        <select class="form-control" placeholder="default:" name="transfer" id="transfer" width="12">
+                                            <option id="input">input</option>
+                                            <option id="601">601</option>
+                                            <option id="709">709</option>
+                                            <option id="2020_10">bt2020 10bit</option>
+                                            <option id="2020_12">bt2020 12bit</option>
+                                            <option id="smpte2084">smpte2084</option>
+                                            <option id="iec61966-2-1">iec61966-2-1</option>
+                                            <option id="arib-std-b67">arib-std-b67</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            
+                                <div class="col mb-3">
+                                    <div class="colourspace collapse" data-bs-toggle="tooltip" data-placement="right" data-html="true" title="What to do with out of range Values? <br>
+                                    <b>clip:</b> <br>Hard Clip them<br>
+                                    <b>linear:</b> <br>linear map them<br>
+                                    <b>gamma:</b> <br>map by gamma curve<br>
+                                    <b>reinhard:</b> <br>preserve brightness<br>
+                                    <b>hable:</b> <br>preserve dark & bright details<br>
+                                    <b>mobius:</b> <br>preserve in gamma colours" >
+
+                                        <label for="tonemap" class="control-label">Tonemap algorith.:</label>
+                                        <select class="form-control" placeholder="default:" name="tonemap" id="tonemap">
+                                            <div><option id="clip">clip</option></div>
+                                            <option id="linear">linear</option>
+                                            <option id="gamma">gamma</option>
+                                            <option value="reinhard">reinhard</option>
+                                            <option value="hable">hable</option>
+                                            <option value="mobius">mobius</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col mb-3">
+                                    <div class="colourspace collapse">
+                                        <label for="primaries" class="control-label">Primaries:</label>
+                                        <select class="form-control" placeholder="default:" name="primaries" id="primaries">
+                                            <option id="input">input</option>
+                                            <option id="709">709</option>
+                                            <option id="2020">2020</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="col mb-3">
+                                    <div class="colourspace collapse">
+                                        <label for="matrix" class="control-label">Colour matrix:</label>
+                                        <select class="form-control" placeholder="default:" name="matrix" id="matrix">
+                                            <option id="input">input</option>
+                                            <option id="709">709</option>
+                                            <option id="2020_ncl">2020 NCL</option>
+                                            <option id="2020_cl">2020 CL</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+
+                                <div class="col-sm-6">
+                                    <div class="collapse colourspace" data-bs-toggle="tooltip" data-placement="left" data-html="true" title="common values are 100, 200 and 1000nits">
+                                        <label for="peaklum" class="control-label">Peak luminace:</label>
+                                        <input class="form-control" type="number" name="peaklum" id="peaklum" placeholder="in nits" min="50" max="1000">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col colourspace collapse" >
+                                <label class="mx-auto nowrap" for="advanced_colour" style="line-height: 5em;"> Use advanced colours: 
+                                    <input style="text-align:center; vertical-align:middle" type="checkbox" id="advanced_colour" name="advanced_colour" value="advanced_colour">
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                                                        
+                        <div class="mx-auto scroll-box" id="bucket-data-list">                                            
+                        </div>
+                                                
+                        <input id= "hidden_url" type="hidden" name="url">
+                        <input id= "hidden_filename" type="hidden" name="filename">
+                    </div>                       
+                </form>
             </row>                      
         </div>
 

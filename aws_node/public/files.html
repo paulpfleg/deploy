@@ -4,7 +4,6 @@
 
 
     <head>
-
         <title>Media Cloud Encoder</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -15,8 +14,8 @@
 
     <body onload="loadData()">
 
+        <!-- Pageheader - Navmenü -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            
             <a class="navbar-brand" href="/">
                 <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
                 Convert
@@ -33,7 +32,6 @@
           
 
         <div class="container" >
-            
             <div class="jumbotron mt-4">
                 <div class="mx-auto" style="width: 20rem;">
                     <div>
@@ -94,8 +92,7 @@
                 xhr.onload = async function() {
                     if (xhr.status === 200) {
                         document.getElementById('waiter').innerHTML = `<div class="tick"></div>`
-                        await redirectToPage('/files');
-                        
+                        await redirectToPage('/files');                       
                     } else {
                         document.getElementById('waiter').innerHTML = `<div class="x"></div>`
                     }
@@ -108,7 +105,6 @@
                 xhr.open('POST', '/upload-to-s3');
                 xhr.send(formData)
                 document.getElementById('waiter').innerHTML = `
-                
                     <div class="spinner-border m-3 d-flex justify-content-center" style="width: 3rem; height: 3rem;" role="status">
                     <span style="background:#2a6bb7; color: white !important"  class="sr-only">Loading...</span>
                     </div>
@@ -122,9 +118,6 @@
                     listAll(data,"deleteFile","bucket-data-list-delete");
                 });
             }
-
-            // same as in index.html -> rendering list of files in bucket 
-                //once for download once for delete
 
             // opens presigned URL in new Window
             function downloadFile(index) {
@@ -145,8 +138,6 @@
             });
             } else return false;
             }
-
-            // same as in index.html in adition has type param, to enable also post requests
 
             // fuction to redirect to / reload page after a certain action waits certain amount of time
             async function redirectToPage(url) {
