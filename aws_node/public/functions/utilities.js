@@ -1,6 +1,6 @@
 function shorten (item)
 {
-    item.lastModified=item.lastModified.slice(0,-8).replace(/-/g, ".").replace(/T/g, " ");
+    item.lastModified=item.lastModified.slice(0,-7).replace(/-/g, ".").replace(/T/g, " ");
     var len = item.key.length;
     item.shortkey=item.key;
     if (len>19) {
@@ -55,7 +55,7 @@ function shorten (item)
   }
 
   // sends an xhr request to to URL 
-  // request type is specified via type param.
+  // request type is specified via type
   function getData(url, type , cb) {
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = state => {
