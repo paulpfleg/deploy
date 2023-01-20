@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-
+<!-- index / convert page, to specify parameters for conversio-requests -->
 <html>
 
     <head>
         <title>Media Cloud Encoder</title>
-        <!-- not jet working -->
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
 
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,27 +15,24 @@
 
         </style>
 
-    
-
     </head>
 
     <body onload="loadData()">
         
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">            
             <a class="navbar-brand" href="/">
                 <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
                 Convert
             </a>
-              <ul class="navbar-nav">
+
+            <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link" href="/files">File Management <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/files">File Management <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/about">About</a>
+                    <a class="nav-link" href="/about">About</a>
                 </li>
-              </ul>
-            
+            </ul>
         </nav>
 
         <div class="container">
@@ -47,18 +43,19 @@
                         <h1 id="welcome" class="text-center">Convert Files</h1>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <p class="text-center" id="forUser">Specify the parameters of your convert and apply them to a file by klicking it.</p>
+                        <p class="text-center" id="forUser">Specify the parameters of your convert and apply them to a file by clicking it.</p>
                     </div>
                 </div>
             </div>
 
+            <!-- div where the spinner is inserted when reques in process -->
             <div id="spinner_here"></div>
                                  
                         <form id="convertForm" action="/parameters" method="post">
                             <div style="max-width: 600;" class="mx-auto">
 
                                 <div class="form-row mb-3 ">
-                                    <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".collapse_video" aria-expanded="false" aria-controls="collapseExample" onclick="rotateTriangle(this)">
+                                    <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".collapse_video" aria-expanded="false" aria-controls="collapseExample">
                                         Video options
                                     </button>
                                 </div>
@@ -81,7 +78,6 @@
                                                 <select class="form-control " placeholder="default: mp4" name="outputFormat" id="outputFormat" required onChange="visibility(`outputFormat`,`codec`,objectCodec)">
                                                     <option>mp4</option>
                                                     <option>mov</option>
-                                                <!--  <option>avi</option> -->
                                                     <option>mkv</option>
                                                     <option>mxf</option>
                                                 </select>
@@ -106,30 +102,29 @@
                                     <hr>
                                     
                                 
-                                        <div class="form-row mb-3 ">
-                                            <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".collapse_advanced" aria-expanded="false" aria-controls="collapseExample">
-                                                advanced options
-                                            </button>
-                                        </div>
+                                    <div class="form-row mb-3 ">
+                                        <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".collapse_advanced" aria-expanded="false" aria-controls="collapseExample">
+                                            advanced options
+                                        </button>
+                                    </div>
                                         
                                     <div class="collapse collapse_advanced">
 
                                         <div class="form-row">
                                             
-                                            
-                                                <div class="col mb-3">
-                                                    <div class="collapse collapse_advanced">
-                                                        <label for="width" class="control-label">Target width:</label>
-                                                        <input type="number" class="form-control" placeholder="leave blank for original" name="width" id="width" min="200" max="4096">
-                                                    </div>
+                                            <div class="col mb-3">
+                                                <div class="collapse collapse_advanced">
+                                                    <label for="width" class="control-label">Target width:</label>
+                                                    <input type="number" class="form-control" placeholder="leave blank for original" name="width" id="width" min="200" max="4096">
                                                 </div>
+                                            </div>
                                             
-                                                <div class="col mb-3">
-                                                    <div class="collapse collapse_advanced">
-                                                        <label for="height" class="control-label">Target height:</label>
-                                                        <input type="number" class="form-control" placeholder="leave blank for original" name="height" id="height" min="200" max="2304">
-                                                    </div>
+                                            <div class="col mb-3">
+                                                <div class="collapse collapse_advanced">
+                                                    <label for="height" class="control-label">Target height:</label>
+                                                    <input type="number" class="form-control" placeholder="leave blank for original" name="height" id="height" min="200" max="2304">
                                                 </div>
+                                            </div>
                                         </div>
 
                                         <div class="form-row">
@@ -157,18 +152,17 @@
                                         </div>
                                     </div>
 
-                                                    <hr class="">
+                                    <hr class="">
                                                  
 
-                                        <div class="form-row mb-3">
-                                            <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".colourspace" aria-expanded="false" aria-controls="colourspace" onclick=hideColourspace()>
-                                                colour options
-                                            </button>
-                                        </div>
+                                    <div class="form-row mb-3">
+                                        <button class="button-collapse mx-auto" type="button" data-toggle="collapse" data-target=".colourspace" aria-expanded="false" aria-controls="colourspace" onclick=hideColourspace()>
+                                            colour options
+                                        </button>
+                                    </div>
 
                                     <div class="collapse colourspace">   
                                         <div class="form-row">
-
                                             <div class="col mb-3">
                                                 <div class="colourspace collapse">
                                                     <label for="transfer" class="control-label">Transferfunction:</label>
@@ -348,14 +342,19 @@
 
             //funtion to run when page is loaded
             function loadData() {
-                getBucketObjectList();
+                getData('/all-files', "GET" , (data = []) => {
+                    listAll(data,"sendForm","bucket-data-list");
+                    
+                });
+                
+                // getBucketObjectList();
                 visibility(`codec`,`profile`,objectProfile);
                 visibility("outputFormat","codec",objectCodec);
             }
 
             //renders the S3 Buckets Data in Card elements
             function getBucketObjectList() {
-                getData('/all-files', (data = []) => {
+                getData('/all-files','GET',(data = []) => {
                     data = JSON.parse(data);
                     list = data;
 
@@ -409,7 +408,7 @@
             async function sendForm(index) {
                 if(formValidation()){
                     const fileName = (list[index] || {}).key;
-                    const url = getData(`/get-object-url/${fileName}`, (url) => {
+                    const url = getData(`/get-object-url/${fileName}`,'GET', (url) => {
                         document.getElementById("hidden_url").value = url;
                         document.getElementById("hidden_filename").value = fileName;
                         document.getElementById("convertForm").submit(function(eventObj) {
@@ -531,19 +530,6 @@
                 document.getElementById("getHidden").innerHTML=``
             }
 
-            async function getData(url, cb) {
-
-
-                const xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = state => {
-                    if(xhr.readyState === XMLHttpRequest.DONE) {
-                        cb(xhr.responseText);
-                    }
-                }
-                xhr.timeout = 10000;
-                xhr.open('GET', url);
-                xhr.send();
-            }
         </script>
 
     

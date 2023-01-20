@@ -2,6 +2,7 @@
 
 <html>
 
+    <!-- Page for dynamic error page render -->
 
     <head>
 
@@ -13,7 +14,7 @@
 
 
 
-    <body onload="loadData()">
+    <body">
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">            
             <a class="navbar-brand" href="/">
@@ -38,7 +39,7 @@
                         <h1 style="text-align: center;">An error occured!</h1>
                     </div>
                     <div>
-
+                        <!-- error message inserted in this headding -->
                         <h2><%= body.error_message %> </h2>
                     </div>
                 </div>
@@ -64,6 +65,7 @@
                         <div class="collapse collapse_additional">
 
                                 <div class="scroll-box mx-auto" style="min-height: 400px; background-color: white;">
+                                    <!-- scroll trough console output of the errored process -->
                                     <%= body.additional_info %>
                                 </div>
 
