@@ -15,7 +15,7 @@
 
 
     <body">
-
+         <!-- Pageheader - nav menu -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">            
             <a class="navbar-brand" href="/">
                 <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -45,43 +45,31 @@
                 </div>
             </div>
 
-                <form action="" style="max-width: 700;">
+            <!-- Form without function just for formating -->
+            <form action="" style="max-width: 700;">
 
+                <div class="col-sm-8 mx-auto">
+                    <h2>Further steps:</h2>
+                    <p> Please try to make the request again and check if the parameters meet the codec's specifications.
+                    </p>
+                </div>
 
-                    <div class="col-sm-8 mx-auto">
-                        <h2>Further steps:</h2>
-                        <p> Please try to make the request again and check if the parameters meet the codec's specifications.
-                        </p>
-                    </div>
+                <hr style="margin-top: 30px; margin-bottom: 30px;">
 
-                    <hr style="margin-top: 30px; margin-bottom: 30px;">
+                <div class="form-row mb-3 ">
+                    <!-- exand the aditional info -->
+                    <button class="button-collapse mx-auto mb-3" type="button" data-toggle="collapse" data-target=".collapse_additional" aria-expanded="false" aria-controls="collapseExample">
+                        additional informations
+                    </button>
 
-                    <div class="form-row mb-3 ">
-
-                        <button class="button-collapse mx-auto mb-3" type="button" data-toggle="collapse" data-target=".collapse_additional" aria-expanded="false" aria-controls="collapseExample">
-                            additional informations
-                        </button>
-
-                        <div class="collapse collapse_additional">
-
-                                <div class="scroll-box mx-auto" style="min-height: 400px; background-color: white;">
-                                    <!-- scroll trough console output of the errored process -->
-                                    <%= body.additional_info %>
-                                </div>
-
+                    <div class="collapse collapse_additional">
+                        <div class="scroll-box mx-auto" style="min-height: 400px; background-color: white;">
+                            <!-- scroll trough console output of the errored process -->
+                            <%= body.additional_info %>
                         </div>
                     </div>
-                </form>
-
-            <div class="row">
-
-                <div class="col-sm-2" ></div>
-
-
-                <div class="col-sm-4"></div>
-            </div>
-
-            <div class="col-sm-2" ></div>
+                </div>
+            </form>
         </div>
 
             <!-- Bootstrap scripts -->

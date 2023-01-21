@@ -26,24 +26,22 @@ app.use(bodyParser.urlencoded({
 app.set('view engine', 'ejs');
 
 // --- Constands ---
-
 const PORT = 8080;
 const IP_backende = process.env.IP || "127.0.0.1"
 const PORT_backend = 8081;
 
 
 // --- Get Endpoints for Front End ---
-
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
+  res.sendFile(__dirname + '/public/index.html');
 });
 
 app.get('/files', (req, res) => {
-    res.sendFile(__dirname + '/public/files.html');
+  res.sendFile(__dirname + '/public/files.html');
 });
 
 app.get('/about', (req, res) => {
-    res.sendFile(__dirname + '/public/about.html')
+  res.sendFile(__dirname + '/public/about.html');
 });
 
 app.get("/new", function(req, res) {
@@ -61,7 +59,6 @@ app.get('/all-files', s3Controller.s3Get);
 app.get('/get-object-url/:key', s3Controller.getSignedUrl);
 
 app.post('/parameters', function(req,res){
-
     console.log("--- Incomming request --- %j",req.body);
     console.log('---- TIME:' + stamp() );
 
@@ -75,12 +72,13 @@ app.listen(PORT, () => {
   console.log(`its alive on http://localhost:${PORT}`);
 });
 
-
+//sends the request to backend
 function sendRequest(options) {
   return new Promise((resolve, reject) => {
-
+    // new postrequest with options
     request.post(options, (err, res, body) => {
       if (err) {
+        // if no connection to BE possible create error resp. to render 
         res = {
           body : {
             error_message : "connection error"
@@ -98,14 +96,12 @@ function sendRequest(options) {
 
 // Logger function mainly to showcase middleware
 function logger (req,res,next){
-console.log("Site "+req.originalUrl+" has been requested")
-next()
+console.log("Site "+req.originalUrl+" has been requested");
+next();
 }
 
 async function call(req,res) {
-
-  const body = req.body
-
+  const body = req.body;
   // maps req. parameters to new json object, to send it to the backend
   var options = {
     url: `http://${IP_backende}:${PORT_backend}/convert/`,
@@ -131,7 +127,6 @@ async function call(req,res) {
   };
 
   var execTime = "";
-
   console.log("--- Out Going Request --- %j" , options.body);
   console.log("to %j  ---- TIME " + stamp(),  options.url);
 
@@ -149,7 +144,6 @@ async function call(req,res) {
     res.render('error.ejs', { body: prove.body});
     logging(startTime,prove);
   }
-
 }
 
 //log the time taken, for the requests
@@ -164,7 +158,6 @@ function logging(startTime,prove){
     if(err) {
         return console.log(err);
     }
-
     console.log("The file was saved!");
   }); 
 }
@@ -188,5 +181,5 @@ function stamp(){
   // current minutes
   const minutes = dateObject.getMinutes();
 
-  return(`${hours}:${minutes}`)
+  return(`${hours}:${minutes}`);
 }

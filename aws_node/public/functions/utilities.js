@@ -1,7 +1,12 @@
+
+// function to format the content of the file cards
 function shorten (item)
 {
+    // cuts of last chars of last modified
+    //replaces cahrs for cleaner format
     item.lastModified=item.lastModified.slice(0,-7).replace(/-/g, ".").replace(/T/g, " ");
     var len = item.key.length;
+    //shortens long titles
     item.shortkey=item.key;
     if (len>19) {
       item.shortkey="..."+item.key.slice(-19);
@@ -16,7 +21,7 @@ function shorten (item)
     data = JSON.parse(data);
     list = data;
     const objectList = data.map((item, index) => {
-      item=shorten(item)
+      item=shorten(item);
 
       if (item.key==="Error"){  
           return `

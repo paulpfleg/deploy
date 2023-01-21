@@ -12,7 +12,7 @@
     </head>
 
     <body onload="loadData()">
-        
+         <!-- Pageheader - nav menu -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">            
             <a class="navbar-brand" href="/">
                 <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -344,51 +344,41 @@
                     data = JSON.parse(data);
                     list = data;
 
-
-
-
                     const objectList = data.map((item, index) => {
-                        item=shorten(item)
+                        item=shorten(item);
 
                         if (item.key==="Error"){  
                             return `
                             <div class="card mb-3" title="S3 Error">
-                            <div class="card-header allert">
-                                            <b class="card-title">S3 Error</b> 
-                                        </div>
-                                        <div class="card-body" >
-                                            when loading files 
-                                            <br>
-                                            <br>
-                                            please check credentials
-                                        </div>
-                            </div>
-                            
-                            </div>`
-                        
-                        
-                        }
-                        else {
-                      
-                            return `
-                                    <div class="card mb-3" onclick="sendForm(${index})" data-bs-toggle="tooltip" data-placement="left" data-html="true" title=${item.key}>
-                                    <div class="card-header">
-                                                    <b class="card-title">${item.shortkey}</b> 
-                                                </div>
-                                                <div class="card-body" >
-                                                    Size: ${item.size} 
-                                                    <br>
-                                                    Modified: ${item.lastModified}
-                                                </div>
+                                <div class="card-header allert">
+                                    <b class="card-title">S3 Error</b> 
+                                </div>
+                                    <div class="card-body" >
+                                        when loading files 
+                                        <br>
+                                        <br>
+                                        please check credentials
                                     </div>
-                                    
-                                    </div>`
+                                </div>                           
+                            </div>`                        
+                        }
+                        else {                      
+                            return `
+                            <div class="card mb-3" onclick="sendForm(${index})" data-bs-toggle="tooltip" data-placement="left" data-html="true" title=${item.key}>
+                                <div class="card-header">
+                                            <b class="card-title">${item.shortkey}</b> 
+                                </div>
+                                <div class="card-body" >
+                                    Size: ${item.size} 
+                                    <br>
+                                    Modified: ${item.lastModified}
+                                </div>                                   
+                            </div>`
                         }
                     });
                     document.getElementById('bucket-data-list').innerHTML = objectList.join(" ");
                 });
             }
-
 
             // add hidden Form Elements and send the form
             async function sendForm(index) {
@@ -411,7 +401,6 @@
                             <button type="button" style="color: white !important" class="btn btn-outline-light btn-sm" onclick="location.href='/';">Next Request</button>
                             `                        
                     });
-
                     console.log(url);
                 }
             }
@@ -419,7 +408,6 @@
             //adds basic client side form validation
             function formValidation(){
                 var breakFunc = 1;
-
                 var outputName = document.getElementById('outputName').value;
                 var outputFormat = document.getElementById('outputFormat').value;
                 var codec = document.getElementById('codec').value;
@@ -436,17 +424,18 @@
                     breakFunc=0;
                 }
 
-                
                 if (codec === "") {
                     alert('Please select a codec!');
                     breakFunc=0;
                 }
                 
                 if (codec === "dnxhd") {
+                    /* check if profile is selected */
                     if (profile === ""){
                         alert('Please select a profile under advanced options!');
                         breakFunc=0;
                     }
+                    /* bitrate should be selected by a profile */
                     if (bitrate != "" ){
                         alert('Please choose bitrate via profile under advanced options!');
                         breakFunc=0;
@@ -460,7 +449,7 @@
                 }
 
                 if (bitrate && (bitrate < 0.01)) {
-                    alert('Bitrate is to low!')
+                    alert('Bitrate is to low!');
                     breakFunc=0;
                 }
 
@@ -486,9 +475,7 @@
                     breakFunc=0;                    
                 }
                 
-
                 return(breakFunc);
-
             }
 
             // shows only possible options for codecs and containers / codecs and profiles
@@ -513,15 +500,12 @@
 
             //hides the basic colour space options, when advanced Options are used 
             function hideColourspace(){
-                document.getElementById("getHidden").innerHTML=``
+                document.getElementById("getHidden").innerHTML=``;
             }
-
         </script>
 
     
         <!-- Bootstrap scripts -->
-
-
         <script>
             document.addEventListener("DOMContentLoaded", function(){
                 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));

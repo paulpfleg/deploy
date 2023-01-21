@@ -16,7 +16,7 @@ async function s3Upload (req, res) {
         await uploadFileToS3(formData.file, 'ffmpeg-node');
         res.sendStatus(200);
     } catch(ex) {
-        res.sendStatus(500);;
+        res.sendStatus(500);
     }
 }
 
@@ -46,7 +46,7 @@ async function s3Delete (req, res) {
         console.log(req.body);
         const {filename} = req.body;
 
-        console.log(filename)
+        console.log(filename);
         await deleteFilefromS3(filename, 'ffmpeg-node');
         
         res.sendFile(path_mod.join(__dirname, '..', '/public/files.html'));
