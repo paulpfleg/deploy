@@ -1,12 +1,11 @@
 const path_mod = require('path');
 
+// creates the command, that is handed over to FFmpeg afterwords
 function createFFmpegString(body,filename){
-
-    
 
     // take parameters from request body
     const {bitrate}         = body;
-    var {outputName}      = body;
+    var {outputName}        = body;
     const {outputFormat}    = body;
     const {codec}           = body;
     const {width}           = body;
@@ -45,6 +44,7 @@ ${colourspace ? `-vf "colorspace=${colourspace}"` : ``} \
 -movflags use_metadata_tags -map_metadata 0 \
 ${outputName ? `${outputPath}/${outputJoined}` : `${outputPath}/video.${outputFormat}`}`
 
+    // creates a Objekt to return
     var stringObj = {
         command: `${ffmpeg_convert}`,
         outputPath:`${outputJoined}`,

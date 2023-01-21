@@ -1,7 +1,9 @@
 **/bin
 **/node_modules
-**/input
-**/output
+**.mp4
+**.mov
+**.mkv
+**.mxf
 **/config.js
 **.DS_Store
 **/package-lock.json

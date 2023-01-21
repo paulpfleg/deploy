@@ -1,9 +1,9 @@
 const express = require('express');
 const bodyParser = require("body-parser");
-var XMLHttpRequest = require('xhr2');
 const fs = require('fs');
 const https = require('https');
 const path_mod = require('path');
+var XMLHttpRequest = require('xhr2');
 
 const { exec } = require('child_process');
 
@@ -17,7 +17,6 @@ app.use(express.json());
 
 //constant server port
 const PORT = 8081;
-
 var converted = {};
 
 
@@ -35,27 +34,26 @@ app.listen(
 //request & respones objects
 app.get("/", function(req, res) {
     res.sendFile(__dirname + "/index.html");
-  });
+});
  
 // post endpoint for ffmpeg conversions
 app.post('/convert/', (req,res) => {
 
     const {url}             = req.body;
     const {filename}        = req.body;
-
     var ffmpeg_convert = wrapper.createFFmpegString(req.body,filename);
     var still_to_send = true;
 
     console.log(req.body);
     console.log(ffmpeg_convert);
 
-if (checkString(ffmpeg_convert.command)){
-    //download file from s3
-    const file = fs.createWriteStream(`${__dirname}/input/${filename}`);
-    const request = https.get(`${url}`, function(response) {
-        response.pipe(file); //after download completed close filestream
-        file.on("finish", () => {
+    if (checkString(ffmpeg_convert.command)){
+        //download file from s3
+        const file = fs.createWriteStream(`${__dirname}/input/${filename}`);
+        const request = https.get(`${url}`, function(response) {
+            response.pipe(file); //after download completed close filestream
 
+            file.on("finish", () => {
                 try{
                     file.close();
                     console.log("Download Completed");
@@ -101,7 +99,7 @@ if (checkString(ffmpeg_convert.command)){
                 }catch (exception){
                     // sends undefined error
                     still_to_send=sendresponse(5,res,still_to_send);
-            }
+                }
             });
         });
     }
@@ -128,9 +126,8 @@ function checkString(String){
 
 //function to send the response for the processed request
 function sendresponse(code,res,still_to_send,additional){
-    //check if response was allready send
+    //check if a response was allready send
     if (still_to_send) {
-
         //arry with error codes
         const erroArray = ["ffmpeg command","file upload","local file deletation","file download","illegal sign"];
         const additional_info = additional;
@@ -140,21 +137,20 @@ function sendresponse(code,res,still_to_send,additional){
             error_code: `00${code}`,
             additional_info : `${additional_info}`,
             error_message : `${erroArray[code]} error`,
-            
-        })
+        });
         return false
     }
 }
 
 //function to remove processed files from local filesystem
 function unlinkFiles(outputName,filename,ans) {
-        console.log("Unlink has begun!");
-        try{
-            fs.unlinkSync(`${__dirname}/output/${outputName}`);
-            fs.unlinkSync(`${__dirname}/input/${filename}`);
-            return true
-        }catch(exception){
-            sendresponse(3,ans,false)
-        }   
+    console.log("Unlink has begun!");
+    try{
+        fs.unlinkSync(`${__dirname}/output/${outputName}`);
+        fs.unlinkSync(`${__dirname}/input/${filename}`);
+        return true
+    }catch(exception){
+        sendresponse(3,ans,false)
+    }   
 }
 
